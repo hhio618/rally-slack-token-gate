@@ -44,4 +44,4 @@ app.event("message", async ({ command, message, event, say }) => { // Replace he
 
 )
 
-app.start(3000)
+app.start(process.env.PORT)
