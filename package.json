@@ -2,10 +2,10 @@
   "name": "rally-slack-token-gate",
   "version": "1.0.0",
   "description": "Token Gating Slack Channels",
-  "main": "index.js",
+  "main": "sample-app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node sample-app.js"
   },
   "repository": {
     "type": "git",
@@ -18,7 +18,12 @@
   },
   "homepage": "https://github.com/hhio618/rally-slack-token-gate#readme",
   "dependencies": {
-    "@slack/bolt": "^3.8.1"
+    "@slack/bolt": "^3.8.1",
+    "@slack/client": "^5.0.2",
+    "@hapi/hapi": "^20.1.5",
+    "@hapi/inert": "^6.0.4",
+    "axios": "^0.21.2",
+    "dotenv": "^10.0.0"
   },
   "engines": {
     "node": "14.x"

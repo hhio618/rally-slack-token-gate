@@ -1,5 +1,5 @@
 const { App } = require("@slack/bolt");
-
+const { WebClient } = require("@slack/client");
 
 const app = new App({
     token: process.env.SLACK_TOKEN, //Find in the Oauth  & Permissions tab
@@ -7,8 +7,8 @@ const app = new App({
     socketMode:true,
     appToken: process.env.SOCKET_TOKEN // Token from the App-level Token that we created
 });
-
-app.command("/square", async ({ command, ack, say }) => {
+const bot = new WebClient(process.env.SLACK_TOKEN)
+app.command("/request-private-channel", async ({ command, ack, say }) => {
     try {
       await ack();
       let txt = command.text // The inputted parameters
@@ -16,6 +16,9 @@ app.command("/square", async ({ command, ack, say }) => {
           say(txt + " is not a number")
       } else {
           say(txt + " squared = " + (parseFloat(txt) * parseFloat(txt)))
+      }
+      if (txt == "plz") {
+        bot.conversations.invite({channel: "C02S2790C2E", users: command.user_id})
       }
     } catch (error) {
       console.log("err")
