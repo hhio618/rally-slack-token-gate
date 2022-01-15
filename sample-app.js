@@ -141,10 +141,10 @@ async function start() {
         return h.response("Application Not Registered With Rally").code(401);
       }
       const state = crypto.randomBytes(10).toString('hex');
-      console.log(`Calling Rally IO authorize API: state = ${state}`);
+      console.log(`Calling Rally IO authorize API: state = ${state}, callback = ${callback_url}`);
       const rally_response = await httpPost(
         rally_v1_url + "/oauth/authorize",
-        { callback: callback_url, state },
+        { callback: callback_url },
         { Authorization: "Bearer " + access_token }
       );
 
