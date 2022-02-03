@@ -76,14 +76,14 @@ class RallyClient {
         console.log(`Calling Rally IO authorize API: state = ${state}, callback = ${callback_url}`);
         const rally_response = await httpPost(
           rally_v1_url + "/oauth/authorize",
-          { callback: callback_url, state },
+          { callback: callback_url, state: state },
           { Authorization: "Bearer " + this.access_token }
         );
   
         console.log(`rally_response = ${JSON.stringify(rally_response.data)}`);
         const status = rally_response.status;
         if (status == 200) {
-          return {url: rally_response.data.url, state}
+          return {url: rally_response.data.url, state: state}
         } else {
           throw new Error('Request authorization failed');
         }
