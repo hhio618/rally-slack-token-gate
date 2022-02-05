@@ -27,8 +27,17 @@ const app = new App({
         path: "/register",
         method: ['GET'],
         handler: (req, res) => {
-          res.writeHead(200)
-          res.end("hello world!")
+          rallyClient.register()
+            .then(registered =>{
+              res.writeHead(200)
+              res.end("Registered")
+            })
+            .catch(err => {
+              console.log(`while registering rally app: ${err}`);
+              res.writeHead(503)
+              res.end("Service unavailable")
+            })
+
         },
       },
     ],
