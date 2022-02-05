@@ -25,7 +25,7 @@ const app = new App({
     customRoutes: [
       {
         path: rallyClient.callback_path,
-        method: ['POST'],
+        method: ['GET'],
         handler: (req, res) => {
           res.write("hello world!")
         },
