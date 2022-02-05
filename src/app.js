@@ -27,7 +27,8 @@ const app = new App({
         path: "/register",
         method: ['GET'],
         handler: (req, res) => {
-          res.write("hello world!")
+          res.writeHead(200)
+          res.end("hello world!")
         },
       },
     ],
