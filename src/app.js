@@ -70,6 +70,5 @@ app.event("message", async ({ command, message, event, say }) => { // Replace he
 
 )
 
-
-await app.start(3000);
-await receiver.start(process.env.PORT|5000);
+app.start(3000);
+receiver.start(process.env.PORT|5000);
