@@ -2,7 +2,7 @@
 
 // Loading the .env file if exists.
 require('dotenv').config();
-const { App, ExpressReceiver } = require("@slack/bolt");
+const { App } = require("@slack/bolt");
 const { WebClient } = require("@slack/client");
 const { RallyClient } = require("./clients/rally.js");
 
@@ -16,18 +16,21 @@ const callback_url = process.env.RALLY_APP_CALLBACK;
 
 const rallyClient = new RallyClient(username, password, data_api_base_url,rally_api_url, rally_v1_url, callback_url)
 
-const receiver = new ExpressReceiver({
-  signingSecret: process.env.SLACK_SIGNING_SECRET
-});
-
-
-receiver.router.get("/register", (req, res) => { rallyClient.register()})
-
 const app = new App({
     token: process.env.SLACK_TOKEN, //Find in the Oauth  & Permissions tab
     signingSecret: process.env.SIGNING_SECRET, // Find in Basic Information Tab
+    socketMode:true,
     appToken: process.env.SOCKET_TOKEN, // Token from the App-level Token that we created
-    socketMode: true,
+    port: process.env.PORT,
+    customRoutes: [
+      {
+        path: rallyClient.callback_path,
+        method: ['POST'],
+        handler: (req, res) => {
+          res.write("hello world!")
+        },
+      },
+    ],
 });
 
 const bot = new WebClient(process.env.SLACK_TOKEN)
@@ -70,5 +73,5 @@ app.event("message", async ({ command, message, event, say }) => { // Replace he
 
 )
 
-app.start(3000);
-receiver.start(process.env.PORT|5000);
+
+app.start(process.env.PORT || 5000)
