@@ -66,7 +66,7 @@ class RallyClient {
         }
     }
 
-    requestAuthorization(){
+    async requestAuthorization(){
         console.log("/authorize");
         if (!this.access_token) {
             // TODO: renew the access token.
@@ -89,7 +89,7 @@ class RallyClient {
         }
       }
 
-      async callback(request, h) {
+    async callback(request, h) {
         console.log(callback_path);
         if (!access_token) {
           return h.response("Application Not Registered With Rally").code(401);
@@ -114,7 +114,7 @@ class RallyClient {
         }
       }
 
-      async userinfo(userId) {
+    async userinfo(userId) {
           if (!this.access_token) {
             // TODO: renew the access token.
             throw new Error("Application Not Registered With Rally")
