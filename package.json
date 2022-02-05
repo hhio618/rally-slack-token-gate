@@ -2,10 +2,10 @@
   "name": "rally-slack-token-gate",
   "version": "1.0.0",
   "description": "Token Gating Slack Channels",
-  "main": "sample-app.js",
+  "main": "src/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node sample-app.js"
+    "start": "node src/app.js"
   },
   "repository": {
     "type": "git",
