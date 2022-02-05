@@ -24,7 +24,7 @@ const app = new App({
     port: process.env.PORT,
     customRoutes: [
       {
-        path: rallyClient.callback_path,
+        path: "/register",
         method: ['GET'],
         handler: (req, res) => {
           res.write("hello world!")
