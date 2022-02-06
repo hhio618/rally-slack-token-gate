@@ -52,7 +52,7 @@ class RallyClient {
 
     async register() {
         console.log(`Trying to register to Rally, username: ${this.username}, password: ${this.password}`);
-        const response = await httpPost(this.rally_v1_url + "/oauth/register", {"username": this.username, "password": this.password});
+        const response = await httpPost(this.rally_v1_url + "/oauth/register", {this.username, this.password});
         const status = response.status;
         console.log(`status = ${status}`);
         const data = response.data;
