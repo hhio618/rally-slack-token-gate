@@ -58,10 +58,10 @@ class RallyClient {
         const data = response.data;
         console.log(`data = ${JSON.stringify(data,undefined,2)}`);
         if (status == 200) {
-          set_authentication(data);
+          this.setAuthentication(data);
           return true
         } else {
-          set_authentication();
+          this.setAuthentication();
           throw new Error('Registration failed: clearing authentication data');
         }
     }
