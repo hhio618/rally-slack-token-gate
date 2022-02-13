@@ -10,7 +10,8 @@ module.exports = {
       },
       user_id: {
         type: Sequelize.STRING,
-        primaryKey: true
+        unique: true,
+        allowNull: false
       },
       channel_id: {
         type: Sequelize.INTEGER,

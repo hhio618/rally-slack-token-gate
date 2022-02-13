@@ -9,13 +9,16 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       channel_name: {
+        allowNull: false,
         type: Sequelize.STRING,
-        primaryKey: true,
+        unique: true,
       },
       nft_rules: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       coin_rules: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       createdAt: {
