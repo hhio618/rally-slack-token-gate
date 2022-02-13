@@ -16,7 +16,8 @@ TODO: could be automated using new Slack Apps beta feature.
 
 ## Deploying on heruko
 heroku config:set PGSSLMODE=no-verify
-NODE_ENV=production DATABASE_URL=$(heroku config:get DATABASE_URL) heroku run sequelize db:migrate $DATABASE_URL
+export DATABASE_URL=$(heroku config:get DATABASE_URL)
+NODE_ENV=production  heroku run sequelize db:migrate --url $DATABASE_URL
 
 ## Commands
 ### `/add-channel`
