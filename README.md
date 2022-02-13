@@ -15,8 +15,8 @@ A bot that allows creators to set a threshold of coins needed or NFT needed to g
 TODO: could be automated using new Slack Apps beta feature.
 
 ## Deploying on heruko
-
-NODE_ENV=production DATABASEURL=$(heroku config:get DATABASE_URL) heroku run db:migrate
+heroku config:set PGSSLMODE=no-verify
+NODE_ENV=production DATABASE_URL=$(heroku config:get DATABASE_URL) heroku run sequelize db:migrate $DATABASE_URL
 
 ## Commands
 ### `/add-channel`
