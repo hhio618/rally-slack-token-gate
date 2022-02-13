@@ -134,7 +134,4 @@ class RallyClient {
 
 }
 
-
-module.exports = {
-    RallyClient: RallyClient
-}
+module.exports = { RallyClient }
