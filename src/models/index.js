@@ -5,13 +5,25 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
+const ssl = (process.env.POSTGRES_USE_SSL || 'true').toLowerCase() == "true";
+var pg = require('pg');
+pg.defaults.ssl = ssl;
+
 const db = {};
 
 let sequelize;
 if (env == "test"){
  sequelize = new Sequelize("sqlite::memory", {dialect: "sqlite"});
 }else{
- sequelize = new Sequelize(process.env.DATABASE_URL, {dialect: "postgres"});
+ sequelize = new Sequelize(process.env.DATABASE_URL, {
+   dialect: "postgres",
+   ssl: ssl,
+   dialectOptions:{
+    ssl:{
+       require: ssl
+    }
+   }
+  });
 }
 
 fs
