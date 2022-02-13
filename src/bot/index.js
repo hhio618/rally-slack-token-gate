@@ -40,7 +40,7 @@ async function adminOnly({ payload, client, context, next }) {
   console.log(slackUserId);
   if (slackUserId != SLACK_ADMIN_USER) {
         await client.chat.postEphemeral({
-          channel: payload.channel,
+          channel: payload.channel_id,
           user: slackUserId,
           text: `Sorry <@${slackUserId}>, you aren't authorized to do such admin tasks.`
         });
