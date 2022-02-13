@@ -36,12 +36,13 @@ const bot = new App({
 // Admin authorization middleware.
 async function adminOnly({ payload, client, context, next }) {
   const slackUserId = payload.user;
+  console.log(slackUserId);
   if (slackUserId != SLACK_ADMIN_USER) {
-        await client.chat.postEphemeral({
-          channel: payload.channel,
-          user: slackUserId,
-          text: `Sorry <@${slackUserId}>, you aren't authorized to do such admin tasks.`
-        });
+        await client.chat.postEphemeral(
+          channel= payload.channel,
+          user= slackUserId,
+          text= `Sorry <@${slackUserId}>, you aren't authorized to do such admin tasks.`
+        );
         return
   }
   
