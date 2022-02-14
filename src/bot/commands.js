@@ -55,13 +55,13 @@ async function addChannel ({ command, ack, say }) {
       let txt = command.text.trim() // The inputted parameters
       
       try{
-        const result = await botClient.conversations.info({channel: txt});
+        const result = await botClient.groups.info({channel: txt});
       } catch (error) {
         // Check the code property, and when its a PlatformError, log the whole response.
         if (error.code === ErrorCode.PlatformError) {
           console.log(error.data);
         } else {
-          say(txt + " is not a valid channel")
+          say(txt + " is not a valid private channel")
         }
         console.log(error.data);
         return;
