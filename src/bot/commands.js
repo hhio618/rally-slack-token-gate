@@ -55,7 +55,7 @@ async function addChannel ({ command, ack, say }) {
       let txt = command.text // The inputted parameters
       
       try{
-        const result = await botClient.channels.info({channel: txt});
+        const result = await botClient.conversations.info({channel: txt});
       } catch (error) {
         // Check the code property, and when its a PlatformError, log the whole response.
         if (error.code === ErrorCode.PlatformError) {
@@ -67,9 +67,11 @@ async function addChannel ({ command, ack, say }) {
       }
 
       const [channel, created] = await db.Channel.findOrCreate({
-        where: { channelName: result.channel_id },
+        where: { channel_name: result.channel_id },
         defaults: {
-          channelName: result.channel_id
+          channel_name: result.channel_id,
+          nft_rules: "",
+          coin_rules: "",
         }
       });
       if (!created){
@@ -93,23 +95,15 @@ async function removeChannel ({ command, ack, say })  {
         say("Please confirm by typing name twice sperated by space")
         return;
       }
-      const channelName = names[0]
-      try{
-        const result = await botClient.channels.info({channel: channelName});
-      } catch (error) {
-        // Check the code property, and when its a PlatformError, log the whole response.
-        if (error.code === ErrorCode.PlatformError) {
-          console.log(error.data);
-        } else {
-          say(channelName + " is not a valid channel")
-        }
-        return;
-      }
-
-      await db.Channel.destroy({
-        where: { channelName: channelName },
+      const channel_name = names[0]
+      const deleted =!! await db.Channel.destroy({
+        where: { channel_name: channel_name },
       });
-      say("channel deleted!")
+      if (deleted){
+        say("channel deleted!")
+      }else{
+        say(channel_name + " is not a valid channel")
+      }
     } catch (error) {
       console.log("err")
       console.error(error);
@@ -123,7 +117,7 @@ async function listChannels ({ command, ack, say })  {
       const results = await db.Channel.findAll();
       const records = results.map(result => result.dataValues);
       for (record of records){
-          say(`Channel name: ${record.channelName}\nNFT rules: ${record.nftRules}\nCreatorCoin rules: ${record.coinRules}`);
+          say(`Channel name: ${record.channel_name}\nNFT rules: ${record.nft_rules}\nCreatorCoin rules: ${record.coin_rules}`);
       }
     } catch (error) {
       console.log("err")
@@ -132,18 +126,18 @@ async function listChannels ({ command, ack, say })  {
   }
 
 
-async function setNFTrules ({ command, ack, say })  {
+async function setNFTRules ({ command, ack, say })  {
     try {
       await ack();
       let txt = command.text // The inputted parameters
       try{
-        channelName, rules = validateRules(txt, nft=true)
+        channel_name, rules = validateRules(txt, nft=true)
       } catch (e){
         say(`Not a valid nft rules arguments, reason: ${e.message}`)
       }
 
       const channel = await db.Channel.findOne({
-        where: { channel_name: channelName },
+        where: { channel_name: channel_name },
       });
 
       if (channel === null) {
@@ -153,7 +147,7 @@ async function setNFTrules ({ command, ack, say })  {
       try {
       await db.Channel.update({ nft_rules: rules }, {
         where: {
-          channelName: channelName
+          channel_name: channel_name
         }
       });
       } catch(error){
@@ -173,13 +167,13 @@ async function setCoinRules ({ command, ack, say })  {
     await ack();
     let txt = command.text // The inputted parameters
     try{
-      channelName, rules = validateRules(txt)
+      channel_name, rules = validateRules(txt)
     } catch (e){
       say(`Not a valid nft rules arguments, reason: ${e.message}`)
     }
 
     const channel = await db.Channel.findOne({
-      where: { channelName: channelName },
+      where: { channel_name: channel_name },
     });
 
     if (channel === null) {
@@ -187,9 +181,9 @@ async function setCoinRules ({ command, ack, say })  {
       return
     }
     try {
-    await db.Channel.update({ coinRules: rules }, {
+    await db.Channel.update({ coin_rules: rules }, {
       where: {
-        channelName: channelName
+        channel_name: channel_name
       }
     });
     } catch(error){
@@ -224,4 +218,4 @@ async function requestPrivateChannel ({ command, ack, say }) {
 
 
 
-module.exports = {validateRules, addChannel, removeChannel, listChannels, setNFTrules, setCoinRules, requestPrivateChannel};
+module.exports = {validateRules, addChannel, removeChannel, listChannels, setNFTRules, setCoinRules, requestPrivateChannel};

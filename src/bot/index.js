@@ -1,5 +1,5 @@
 const { App } = require("@slack/bolt")
-const {addChannel, removeChannel, listChannels, setNFTrules,
+const {addChannel, removeChannel, listChannels, setNFTRules,
    setCoinRules, requestPrivateChannel} = require("./commands")
 const listenChannelRemoveEvent = require("./events")
 
@@ -54,7 +54,7 @@ async function adminOnly({ payload, client, context, next }) {
 bot.command("/add-channel", adminOnly, addChannel)
 bot.command("/remove-channel", adminOnly, removeChannel)
 bot.command("/list-channels", adminOnly, listChannels)
-bot.command("/set-nft-rules", adminOnly, setNFTrules)
+bot.command("/set-nft-rules", adminOnly, setNFTRules)
 bot.command("/set-coin-rules", adminOnly, setCoinRules)
 
 // Listening to the required events.
