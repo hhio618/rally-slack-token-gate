@@ -1,5 +1,5 @@
 
-const { App, ErrorCode } = require("@slack/bolt")
+const { ErrorCode } = require("@slack/bolt")
 const { WebClient } = require("@slack/client")
 const { db } = require("../models")
 const { rallyClient } = require("../rally")
