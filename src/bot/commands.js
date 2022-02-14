@@ -52,7 +52,7 @@ function validateRules(txt, nft=false){
 async function addChannel ({ command, ack, say }) {
     try {
       await ack();
-      let txt = command.text // The inputted parameters
+      let txt = command.text.trim() // The inputted parameters
       
       try{
         const result = await botClient.conversations.info({channel: txt});
@@ -63,6 +63,7 @@ async function addChannel ({ command, ack, say }) {
         } else {
           say(txt + " is not a valid channel")
         }
+        console.log(error.data);
         return;
       }
 
