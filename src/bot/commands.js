@@ -49,13 +49,13 @@ function validateRules(txt, nft=false){
   return {channel: parts[0], rules: rules}
 }
 
-async function addChannel ({ command, ack, say }) {
+async function addChannel ({ command, client, ack, say }) {
     try {
       await ack();
       let txt = command.text.trim() // The inputted parameters
       
       try{
-        const result = await botClient.groups.info({channel: txt});
+        const result = await client.conversations.info({channel: txt});
       } catch (error) {
         // Check the code property, and when its a PlatformError, log the whole response.
         if (error.code === ErrorCode.PlatformError) {
