@@ -55,7 +55,7 @@ async function addChannel ({ command, client, ack, say }) {
       let txt = command.text.trim() // The inputted parameters
       
       try{
-        const result = await client.conversations.info({channel: txt});
+        const result = await client.conversations.info({channel: "C02S2790C2E"});
       } catch (error) {
         // Check the code property, and when its a PlatformError, log the whole response.
         if (error.code === ErrorCode.PlatformError) {
