@@ -52,8 +52,14 @@ function validateRules(txt, nft=false){
 async function addChannel ({ command, client, ack, say }) {
     try {
       await ack();
-      let txt = command.text.trim() // The inputted parameters
-      
+      let txt;
+      try {
+        txt = command.text.trim().split("#")[1].split("|")[0] // The inputted parameters
+      } catch(error){
+        say(txt + " is not a valid private channel")
+        return;
+      }
+
       try{
         const result = await client.conversations.info({channel: txt});
       } catch (error) {
