@@ -56,6 +56,8 @@ async function addChannel ({ command, client, ack, say }) {
       try {
         txt = command.text.trim().split("#")[1].split("|")[0] // The inputted parameters
       } catch(error){
+        console.log(error);
+        console.log(txt);
         say(txt + " is not a valid private channel")
         return;
       }
@@ -70,6 +72,8 @@ async function addChannel ({ command, client, ack, say }) {
           say(txt + " is not a valid private channel")
         }
         console.log(error.data);
+        console.log(txt);
+
         return;
       }
 
