@@ -10,6 +10,11 @@ const botClient = new WebClient(process.env.SLACK_TOKEN)
 
 var invalidRuleError = new Error("invalid/missing rules");
 
+
+function getChannelId(txt){
+  return txt !== undefined ? txt.trim().split("#")[1].split("|")[0]: "" // The inputted parameters
+}
+
 function isRuleValid(rule, nft=false){
   parts = rule.split(':')
   if (parts.length == 2){
@@ -46,7 +51,7 @@ function validateRules(txt, nft=false){
         throw invalidRuleError
     }
   }
-  return {channel: parts[0], rules: rules}
+  return {channel: getChannelId(parts[0]), rules: rules}
 }
 
 async function addChannel ({ command, client, ack, say }) {
@@ -54,7 +59,7 @@ async function addChannel ({ command, client, ack, say }) {
       await ack();
       let txt;
       try {
-        txt = command.text.trim().split("#")[1].split("|")[0] // The inputted parameters
+        txt = getChannelId(command.text)
       } catch(error){
         console.log(error);
         console.log(txt);
@@ -113,7 +118,7 @@ async function removeChannel ({ command, ack, say })  {
 
       let name;
       try {
-        name = names[0].trim().split("#")[1].split("|")[0] // The inputted parameters
+        name = getChannelId(names[0])
       } catch(error){
         console.log(error);
         console.log(txt);
@@ -159,7 +164,7 @@ async function setNFTRules ({ command, ack, say })  {
       try{
         channel_name, rules = validateRules(txt, nft=true)
       } catch (e){
-        say("Should be a list of [nft-address -> An NFT address of interest]:[min-requirements -> an integer number, default to 1] seperated by `,`")
+        say("Input format: <channel_name> <[nft-address1]:[num-min-requirements1],[nft-address2]:[num-min-requirements2],...>")
       }
 
       const channel = await db.Channel.findOne({
@@ -198,7 +203,7 @@ async function setCoinRules ({ command, ack, say })  {
     try{
       channel_name, rules = validateRules(txt)
     } catch (e){
-      say("Should be a list of [coin-address -> A CreatorCoin address of interest]:[min-requirements -> a float number] seperated by `,`")
+      say("Input format: <channel_name> <[coin-address1]:[float-min-requirements1],[coin-address2]:[float-min-requirements2],...>")
     }
 
     const channel = await db.Channel.findOne({
