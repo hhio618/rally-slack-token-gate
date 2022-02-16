@@ -20,7 +20,8 @@ if (env == "test"){
    ssl: ssl,
    dialectOptions:{
     ssl:{
-       require: ssl
+       require: ssl,
+       rejectUnauthorized: false
     }
    }
   });
