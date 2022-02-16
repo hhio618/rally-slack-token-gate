@@ -79,7 +79,7 @@ async function addChannel ({ command, client, ack, say }) {
       console.log(result)
 
       const [channel, created] = await db.Channel.findOrCreate({
-        where: { channel_name: result.channel_id },
+        where: { channel_name: result.channel.id },
         defaults: {
           channel_name: result.channel_id,
           nft_rules: "",
