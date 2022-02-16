@@ -76,8 +76,8 @@ async function addChannel ({ command, client, ack, say }) {
         console.log(txt);
         return;
       }
+      console.log(result)
 
-      console.log(db)
       const [channel, created] = await db.Channel.findOrCreate({
         where: { channel_name: result.channel_id },
         defaults: {
