@@ -1,7 +1,7 @@
 
 const { ErrorCode } = require("@slack/bolt")
 const { WebClient } = require("@slack/client")
-const { db } = require("../models")
+const db = require("../models")
 const { rallyClient } = require("../rally")
 
 // Bot client for performing admin tasks.
@@ -62,8 +62,9 @@ async function addChannel ({ command, client, ack, say }) {
         return;
       }
 
+      let result;
       try{
-        const result = await client.conversations.info({channel: txt});
+        result = await client.conversations.info({channel: txt});
       } catch (error) {
         // Check the code property, and when its a PlatformError, log the whole response.
         if (error.code === ErrorCode.PlatformError) {
@@ -73,10 +74,10 @@ async function addChannel ({ command, client, ack, say }) {
         }
         console.log(error.data);
         console.log(txt);
-
         return;
       }
 
+      console.log(db)
       const [channel, created] = await db.Channel.findOrCreate({
         where: { channel_name: result.channel_id },
         defaults: {
