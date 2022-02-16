@@ -70,7 +70,7 @@ async function addChannel ({ command, client, ack, say }) {
         if (error.code === ErrorCode.PlatformError) {
           console.log(error.data);
         } else {
-          say(txt + " is not a valid private channel")
+          say(txt + "channel is not found or bot is not a memeber of it")
         }
         console.log(error.data);
         console.log(txt);
@@ -155,10 +155,11 @@ async function setNFTRules ({ command, ack, say })  {
     try {
       await ack();
       let txt = command.text // The inputted parameters
+      let channel_name;
       try{
         channel_name, rules = validateRules(txt, nft=true)
       } catch (e){
-        say(`Not a valid nft rules arguments, reason: ${e.message}`)
+        say("Should be a list of [nft-address -> An NFT address of interest]:[min-requirements -> an integer number, default to 1] seperated by `,`")
       }
 
       const channel = await db.Channel.findOne({
@@ -193,10 +194,11 @@ async function setCoinRules ({ command, ack, say })  {
   try {
     await ack();
     let txt = command.text // The inputted parameters
+    let channel_name;
     try{
       channel_name, rules = validateRules(txt)
     } catch (e){
-      say(`Not a valid nft rules arguments, reason: ${e.message}`)
+      say("Should be a list of [coin-address -> A CreatorCoin address of interest]:[min-requirements -> a float number] seperated by `,`")
     }
 
     const channel = await db.Channel.findOne({
