@@ -110,14 +110,24 @@ async function removeChannel ({ command, ack, say })  {
         say("Please confirm by typing name twice sperated by space")
         return;
       }
-      const channel_name = names[0]
+
+      let name;
+      try {
+        name = names[0].trim().split("#")[1].split("|")[0] // The inputted parameters
+      } catch(error){
+        console.log(error);
+        console.log(txt);
+        say(names[0] + " is not a managed private channel")
+        return;
+      }
+      
       const deleted =!! await db.Channel.destroy({
-        where: { channel_name: channel_name },
+        where: { channel_name: name },
       });
       if (deleted){
         say("channel deleted!")
       }else{
-        say(channel_name + " is not a valid channel")
+        say(name + " is not a managed private channel")
       }
     } catch (error) {
       console.log("err")
