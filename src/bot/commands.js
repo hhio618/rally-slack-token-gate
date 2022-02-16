@@ -88,7 +88,10 @@ async function addChannel ({ command, client, ack, say }) {
       });
       if (!created){
         say("channel already exists!")
+      }else{
+        say("channel added!, please add your desired rules using /set-nft-rules or /set-coin-rules commands.")
       }
+
 
     } catch (error) {
       console.log("err")
@@ -162,12 +165,14 @@ async function setNFTRules ({ command, ack, say })  {
           channel_name: channel_name
         }
       });
+      say(`ًRules changed!`)
       } catch(error){
         console.log("err")
         console.error(error);
         say(`Unexpected internal error`)
         return;
       }
+
     } catch (error) {
       console.log("err")
       console.error(error);
@@ -193,11 +198,12 @@ async function setCoinRules ({ command, ack, say })  {
       return
     }
     try {
-    await db.Channel.update({ coin_rules: rules }, {
-      where: {
-        channel_name: channel_name
-      }
-    });
+      await db.Channel.update({ coin_rules: rules }, {
+        where: {
+          channel_name: channel_name
+        }
+      });
+      say(`ًRules changed!`)
     } catch(error){
       console.log("err")
       console.error(error);
