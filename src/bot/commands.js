@@ -30,7 +30,7 @@ function isRuleValid(rule, nft=false){
 // Validate input rules.
 function validateRules(txt, nft=false){
   // Accept valid characters only.
-  if (! /^[a-zA-Z0-9_\.\,\-\:\s]*$/.test(txt)){
+  if (! /^[a-zA-Z0-9_\.\,\-\:\s#<>|]*$/.test(txt)){
     throw invalidRuleError
   }
   txt = txt.trim()
