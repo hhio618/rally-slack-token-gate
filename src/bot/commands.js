@@ -157,10 +157,10 @@ async function listChannels ({ command, ack, say })  {
 
 
 async function setNFTRules ({ command, ack, say })  {
+    let channel_name, rules;
     try {
       await ack();
       let txt = command.text // The inputted parameters
-      let channel_name;
       try{
         channel_name, rules = validateRules(txt, nft=true)
       } catch (e){
@@ -198,10 +198,10 @@ async function setNFTRules ({ command, ack, say })  {
 }
 
 async function setCoinRules ({ command, ack, say })  {
+  let channel_name, rules;
   try {
     await ack();
     let txt = command.text // The inputted parameters
-    let channel_name;
     try{
       channel_name, rules = validateRules(txt)
     } catch (e){
