@@ -164,7 +164,9 @@ async function setNFTRules ({ command, ack, say })  {
       try{
         channel_name, rules = validateRules(txt, nft=true)
       } catch (e){
-        say("Input format: <channel_name> <[nft-address1]:[num-min-requirements1],[nft-address2]:[num-min-requirements2],...>")
+        console.log("err")
+        console.log(e)
+        say("Input format: <channel_name> <[nft-address1]:[num-min-requirements1] , [nft-address2]:[num-min-requirements2],...>")
       }
 
       const channel = await db.Channel.findOne({
@@ -203,7 +205,9 @@ async function setCoinRules ({ command, ack, say })  {
     try{
       channel_name, rules = validateRules(txt)
     } catch (e){
-      say("Input format: <channel_name> <[coin-address1]:[float-min-requirements1],[coin-address2]:[float-min-requirements2],...>")
+      console.log("err")
+      console.log(e)
+      say("Input format: <channel_name> <[coin-address1]:[float-min-requirements1] , [coin-address2]:[float-min-requirements2],...>")
     }
 
     const channel = await db.Channel.findOne({
