@@ -11,18 +11,17 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.belongsTo(models.Channel, {
-        foreignKey: 'channel_id',
-        onDelete: 'CASCADE'
-      });
-      User.hasMany(models.RallyChallenge, {
-        foreignKey: 'user_id',
-      });
+      // User.belongsToMany(
+      //   Channel, 
+      //   {
+      //       through: 'RallyChallenges',
+      //       foreignKey: 'user_id'
+      //   }
+      // )
     }
   }
   User.init({
-    user_id: DataTypes.STRING,
-    channel_id: DataTypes.INTEGER
+    slack_id: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'User',

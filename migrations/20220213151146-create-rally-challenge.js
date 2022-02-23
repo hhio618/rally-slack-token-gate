@@ -17,16 +17,28 @@ module.exports = {
           as: "user_id"
         }
       },
-      rally_id: {
+      channel_id: {
+        type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'Channels',
+          key: 'id',
+          as: "channel_id"
+        }
+      },
+      rally_state: {
         type: Sequelize.STRING,
         unique: true,
         allowNull: false
+      },  
+      rally_account_id: {
+        type: Sequelize.STRING,
       },
-      passed_rules: {
+      required_rules: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      completed: {
+      settled: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
       },

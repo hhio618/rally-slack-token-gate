@@ -3,8 +3,11 @@ A bot that allows creators to set a threshold of coins needed or NFT needed to g
 
 ## TODO's
 - [ ] Add eslint
-- [ ] Type fixes
+- [ ] Typo fixes
 - [ ] Add more tests
+- [ ] Renew rally access token
+- [ ] Mock real database for more realistic tests
+- [ ] (Optional) Add support for multiple workspaces using team_id (1- add authorized admin command, 2- add team_id to the database)
 
 ## Slack app setup
 1. Add required permissions.

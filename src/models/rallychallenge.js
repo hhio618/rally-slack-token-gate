@@ -11,17 +11,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      RallyChallenge.belongsTo(models.User, {
-        foreignKey: 'user_id',
-        onDelete: 'CASCADE'
-      })
     }
   }
   RallyChallenge.init({
     user_id: DataTypes.INTEGER,
-    rally_id: DataTypes.STRING,
-    passed_rules: DataTypes.STRING,
-    completed: DataTypes.BOOLEAN
+    channel_id: DataTypes.INTEGER,
+    rally_state: DataTypes.STRING,
+    rally_account_id: DataTypes.STRING,
+    required_rules: DataTypes.STRING,
+    settled: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'RallyChallenge',

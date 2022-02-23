@@ -11,9 +11,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Channel.hasMany(models.User, {
-        foreignKey: 'channel_id',
-      })
+      // Channel.belongsToMany(
+      //   User, 
+      //   {
+      //       through: 'RallyChallenges',
+      //       foreignKey: 'channel_id'
+      //   }
+      // )
     }
   }
   Channel.init({

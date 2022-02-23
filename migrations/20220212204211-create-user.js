@@ -8,19 +8,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      user_id: {
+      slack_id: {
         type: Sequelize.STRING,
         unique: true,
         allowNull: false
-      },
-      channel_id: {
-        type: Sequelize.INTEGER,
-        onDelete: 'CASCADE',
-        references: {
-          model: 'Channels',
-          key: 'id',
-          as: "channel_id"
-        }
       },
       createdAt: {
         allowNull: false,

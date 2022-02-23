@@ -1,8 +1,15 @@
 const axios = require('axios').default;
-const crypto = require("crypto");
+const { config } = require('dotenv');
 
-function toConfig(headers) {
-    return headers && Object.keys(headers).length ? { headers } : undefined;
+function toConfig(headers, params) {
+  let config = {};
+  if(headers && Object.keys(headers).length ){
+    config.headers = headers;
+  }
+  if(params && Object.keys(params).length ){
+    config.params = params;
+  }
+  return config;
 }
 
 async function httpPost(url, body, headers) {
@@ -13,13 +20,16 @@ async function httpPost(url, body, headers) {
     }
 }
 
-async function httpGet(url, headers) {
+async function httpGet(url, headers, params) {
     try {
-      return await axios.get(url, toConfig(headers));
+      return await axios.get(url, toConfig(headers, params));
     } catch (err) {
       return err.response;
     }
 }
+
+const ErrNotRegistered = new Error("Application Not Registered With Rally");
+const ErrFailedAuthorization = new Error("Request authorization failed");
 
 class RallyClient {
     access_token = undefined;
@@ -68,13 +78,12 @@ class RallyClient {
         }
     }
 
-    async requestAuthorization(){
+    async requestAuthorization(state){
         console.log("/authorize");
         if (!this.access_token) {
             // TODO: renew the access token.
-            throw new Error("Application Not Registered With Rally")
+            throw ErrNotRegistered
         }
-        const state = crypto.randomBytes(10).toString('hex');
         console.log(`Calling Rally IO authorize API: state = ${state}, callback = ${callback_url}`);
         const rally_response = await httpPost(
           rally_v1_url + "/oauth/authorize",
@@ -87,32 +96,26 @@ class RallyClient {
         if (status == 200) {
           return {url: rally_response.data.url, state: state}
         } else {
-          throw new Error('Request authorization failed');
+          throw ErrFailedAuthorization;
         }
-      }
+    }
 
-    async callback(request, h) {
+    async requestRallyAccountId(code) {
         console.log(callback_path);
         if (!access_token) {
-          return h.response("Application Not Registered With Rally").code(401);
-        }
-        console.log(`params = ${JSON.stringify(request.query)}`);
-        const code = request.query.code;
-        const state = request.query.state;
-        console.log(`code = ${code}, state = ${state}`);
-        if (code === "cancelled") {
-          return h.response("No authorization to continue").code(200);
+          throw ErrNotRegistered;
         }
         const rally_response = await httpPost(
           rally_v1_url + "/oauth/userinfo",
           { code },
           { Authorization: "Bearer " + access_token }
         );
+        
         const status = rally_response.status;
         if (status == 200) {
-          return h.response(rally_response.data).code(200);
+          return rally_response.data.rnbUserId
         } else {
-          return h.response(rally_response.statusText).code(status);
+          throw new Error("Rally initial account info request failed")
         }
       }
 
@@ -129,8 +132,57 @@ class RallyClient {
           );
     
           console.log(`rally_response = ${JSON.stringify(rally_response.data)}`);
-          return rally_response.data
-        }
+          const status = rally_response.status;
+          if (status == 200) {
+            return rally_response.data
+          } else {
+            throw new Error("Rally initial account info request failed")
+          }
+    }
+
+    async balance(rallyNetworkWalletId, symbolSearch) {
+      if (!this.access_token) {
+        // TODO: renew the access token.
+        throw new Error("Application Not Registered With Rally")
+      }
+      console.log(`rallyNetworkWalletId = ${userallyNetworkWalletIdrId}`);
+      console.log("Calling Rally IO Balance API");
+      const rally_response = await httpGet(
+        `${this.rally_api_url}/rally-network-wallets/${rallyNetworkWalletId}/balance`,
+        { Authorization: "Bearer " + this.access_token }, {symbolSearch}
+      );
+
+      console.log(`rally_response = ${JSON.stringify(rally_response.data)}`);
+      const status = rally_response.status;
+      if (status == 200) {
+        const data = rally_response.data[0];
+        return data? data.amount: 0;
+      } else {
+        throw new Error("Rally balance req failed")
+      }
+
+    }
+
+    async nft(rallyNetworkWalletId, nftTemplateId) {
+      if (!this.access_token) {
+        // TODO: renew the access token.
+        throw new Error("Application Not Registered With Rally")
+      }
+      console.log(`rallyNetworkWalletId = ${userallyNetworkWalletIdrId}`);
+      console.log("Calling Rally IO Balance API");
+      const rally_response = await httpGet(
+        `${this.rally_api_url}/nfts`,
+        { Authorization: "Bearer " + this.access_token }, {rallyNetworkWalletId, nftTemplateId}
+      );
+
+      console.log(`rally_response = ${JSON.stringify(rally_response.data)}`);
+      const status = rally_response.status;
+      if (status == 200) {
+        return rally_response.data.length
+      } else {
+        throw new Error("Rally nft req failed")
+      }
+    }
 
 }
 

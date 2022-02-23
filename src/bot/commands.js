@@ -3,9 +3,7 @@ const { ErrorCode } = require("@slack/bolt")
 const { WebClient } = require("@slack/client")
 const db = require("../models")
 const { rallyClient } = require("../rally")
-
-// Bot client for performing admin tasks.
-const botClient = new WebClient(process.env.SLACK_TOKEN)
+const crypto = require("crypto");
 
 
 var invalidRuleError = new Error("invalid/missing rules");
@@ -157,20 +155,21 @@ async function listChannels ({ command, ack, say })  {
 
 
 async function setNFTRules ({ command, ack, say })  {
-    let channel_name, rules;
+    let rules;
     try {
       await ack();
       let txt = command.text // The inputted parameters
       try{
-        channel_name, rules = validateRules(txt, nft=true)
+        rules = validateRules(txt, nft=true)
       } catch (e){
         console.log("err")
         console.log(e)
         say("Input format: <channel_name> <[nft-address1]:[num-min-requirements1] , [nft-address2]:[num-min-requirements2],...>")
+        return;
       }
 
       const channel = await db.Channel.findOne({
-        where: { channel_name: channel_name },
+        where: { channel_name: rules.channel },
       });
 
       if (channel === null) {
@@ -178,19 +177,18 @@ async function setNFTRules ({ command, ack, say })  {
         return
       }
       try {
-      await db.Channel.update({ nft_rules: rules }, {
-        where: {
-          channel_name: channel_name
-        }
-      });
-      say(`ًRules changed!`)
+        await db.Channel.update({ nft_rules: rules.rules }, {
+          where: {
+            channel_name: rules.channel
+          }
+        });
       } catch(error){
         console.log("err")
         console.error(error);
         say(`Unexpected internal error`)
         return;
       }
-
+      say(`Rules changed!`);
     } catch (error) {
       console.log("err")
       console.error(error);
@@ -198,20 +196,21 @@ async function setNFTRules ({ command, ack, say })  {
 }
 
 async function setCoinRules ({ command, ack, say })  {
-  let channel_name, rules;
+  let rules;
   try {
     await ack();
     let txt = command.text // The inputted parameters
     try{
-      channel_name, rules = validateRules(txt)
+      rules = validateRules(txt, nft=false)
     } catch (e){
       console.log("err")
       console.log(e)
       say("Input format: <channel_name> <[coin-address1]:[float-min-requirements1] , [coin-address2]:[float-min-requirements2],...>")
+      return;
     }
 
     const channel = await db.Channel.findOne({
-      where: { channel_name: channel_name },
+      where: { channel_name: rules.channel },
     });
 
     if (channel === null) {
@@ -219,37 +218,80 @@ async function setCoinRules ({ command, ack, say })  {
       return
     }
     try {
-      await db.Channel.update({ coin_rules: rules }, {
+      await db.Channel.update({ coin_rules: rules.rules }, {
         where: {
-          channel_name: channel_name
+          channel_name: rules.channel
         }
       });
-      say(`ًRules changed!`)
     } catch(error){
       console.log("err")
       console.error(error);
       say(`Unexpected internal error`)
       return;
     }
+    say(`Rules changed!`);
   } catch (error) {
     console.log("err")
     console.error(error);
   }
 }
 
-async function requestPrivateChannel ({ command, ack, say }) {
+async function requestPrivateChannel ({ command, client, ack, say }) {
     try {
       await ack();
-      let txt = command.text // The inputted parameters
-      if(isNaN(txt)) {
-          say(txt + " is not a number")
-      } else {
-          say(txt + " squared = " + (parseFloat(txt) * parseFloat(txt)))
+      let channel_id;
+      try {
+        channel_id = getChannelId(command.text)
+      } catch(error){
+        console.log(error);
+        console.log(txt);
+        say(txt + " is not a valid private channel")
+        return;
       }
-      if (txt == "plz") {
-        bot.conversations.invite({channel: "C02S2790C2E", users: command.user_id})
+
+      const channel = await db.Channel.findOne({
+        where: { channel_name: channel_id },
+      });
+
+      if (channel === null) {
+        say("Channel not found!")
+        return
+      }
+
+      // Create user if not exists.
+      const [user, created] = await db.User.findOrCreate({
+        where: { slack_id: command.user_id },
+        defaults: {
+          slack_id:  command.user_id
+        }
+      });
+
+      if (!created){
+        console.log("user already exists, skip on creation...")
+      }
+
+      // Random state string.
+      const state = crypto.randomBytes(10).toString('hex');
+      // Create the Rally challenge if not exists.
+      await db.RallyChallenge.findOrCreate({
+        where: { user_id: user.id, channel_id: channel.id },
+        defaults: {
+          user_id: user.id, 
+          channel_id: channel.id,
+          rally_state: state,
+          required_rules: `${channel.coin_rules}|${channel.nft_rules}`
+        }
+      });
+
+      try{
+        const data = await rallyClient.requestAuthorization(state)
+        say(`Please follow this link to fullfill the challenge using your Rally account: \n${data.url}`)
+      }catch(err) {
+        console.log(`while requesting rally authorize url: ${err}`);
+        say("Error while requesting a Rally authorization, please try again later")
       }
     } catch (error) {
+      say("Unexpected internal error!")
       console.log("err")
       console.error(error);
     }
