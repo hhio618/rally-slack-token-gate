@@ -1,16 +1,16 @@
 const { identity } = require("lodash")
 
 
-function toDict(txt, float=false){
+function toDict(txt, is_float=false){
     let out = {};
     const rules = txt.split(",");
-    for (rule of rules){
+    for (const rule of rules){
         const [id, value] = rule.split(":");
         let numValue;
-        if (float){
-            numValue = float(value.trim());
+        if (is_float){
+            numValue = parseFloat(value.trim());
         }else{
-            numValue = int(float(value.trim()));
+            numValue = parseInt(parseFloat(value.trim()));
         }
         out[id] = numValue;
     }

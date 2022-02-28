@@ -38,6 +38,7 @@
     "crypto": "1.0.1",
     "dotenv": "^16.0.0",
     "lodash": "4.17.21",
+    "mock-req-res": "1.2.0",
     "pg": "^8.7.3",
     "pg-hstore": "2.3.4",
     "query-string": "7.1.1",
