@@ -26,7 +26,7 @@ const bot = new App({
 // Admin authorization middleware.
 async function adminOnly({ payload, client, context, next }) {
   console.log(payload)
-  const result = slackUserClient.admins.user.list({team: payload.team_id});
+  const result = slackUserClient.admin.users.list({team: payload.team_id});
   console.log(result)
   const admins = result.users.filter(user => !user.is_bot).map(user => user.id);
   const slackUserId = payload.user_id;
