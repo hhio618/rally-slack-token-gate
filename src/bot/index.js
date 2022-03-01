@@ -25,13 +25,13 @@ const bot = new App({
 
 // Admin authorization middleware.
 async function adminOnly({ payload, client, context, next }) {
-  console.log(payload)
-  const {result} = await slackUserClient.admin.users.list({team: payload.team_id});
-  console.log(result)
-  const admins = result.users.filter(user => !user.is_bot).map(user => user.id);
+  // const {result} = await slackUserClient.admin.users.list({team: payload.team_id});
+  // console.log(result)
+  // const admins = result.users.filter(user => !user.is_bot).map(user => user.id);
   const slackUserId = payload.user_id;
   console.log(`Processing request for the slack user: ${slackUserId}`);
-  if (admins.includes(slackUserId)) {
+  // if (admins.includes(slackUserId)) {
+  if (slackUserId !== process.env.SLACK_ADMIN_USER) {
         await client.chat.postEphemeral({
           channel: payload.channel_id,
           user: slackUserId,
