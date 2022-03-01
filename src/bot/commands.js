@@ -278,6 +278,7 @@ async function requestPrivateChannel ({ command, client, ack, say }) {
         defaults: {
           user_id: user.id, 
           channel_id: channel.id,
+          settled: false,
           rally_state: state,
           required_rules: `${channel.coin_rules}|${channel.nft_rules}`
         }
