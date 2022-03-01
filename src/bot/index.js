@@ -2,7 +2,7 @@ const { App } = require("@slack/bolt")
 const {addChannel, removeChannel, listChannels, setNFTRules,
    setCoinRules, requestPrivateChannel} = require("./commands")
 const {callback} = require("../rally")
-const {slackUserClient} = require("./client")
+const slackUserClient = require("./client")
 const listenChannelRemoveEvent = require("./events")
 
 
