@@ -49,6 +49,7 @@ bot.command("/remove-channel", adminOnly, removeChannel)
 bot.command("/list-channels", adminOnly, listChannels)
 bot.command("/set-nft-rules", adminOnly, setNFTRules)
 bot.command("/set-coin-rules", adminOnly, setCoinRules)
+bot.command("/request-channel", requestPrivateChannel)
 
 // Listening to the required events.
 bot.event('channel_deleted', listenChannelRemoveEvent)
