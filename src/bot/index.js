@@ -27,6 +27,7 @@ const bot = new App({
 async function adminOnly({ payload, client, context, next }) {
   console.log(payload)
   const result = slackUserClient.admins.user.list({team: payload.team_id});
+  console.log(result)
   const admins = result.users.filter(user => !user.is_bot).map(user => user.id);
   const slackUserId = payload.user_id;
   console.log(`Processing request for the slack user: ${slackUserId}`);
