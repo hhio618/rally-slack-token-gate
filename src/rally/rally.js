@@ -31,6 +31,7 @@ async function httpGet(url, headers, params) {
 const ErrNotRegistered = new Error("Application Not Registered With Rally");
 const ErrFailedAuthorization = new Error("Request authorization failed");
 
+
 class RallyClient {
     access_token = undefined;
     refresh_token = undefined;
@@ -60,29 +61,9 @@ class RallyClient {
         }
     }
 
-    async register() {
-        console.log(`Trying to register to Rally, username: ${this.username}, password: ${this.password} `);
-        const username = this.username;
-        const password = this.password;
-        const response = await httpPost(this.rally_v1_url + "/oauth/register", {username, password});
-        const status = response.status;
-        console.log(`status = ${status}`);
-        const data = response.data;
-        console.log(`data = ${JSON.stringify(data,undefined,2)}`);
-        if (status == 200) {
-          this.setAuthentication(data);
-          return true
-        } else {
-          this.setAuthentication();
-          throw new Error('Registration failed: clearing authentication data');
-        }
-    }
-
     async requestAuthorization(state){
         console.log("/authorize");
         if (!this.access_token) {
-            // TODO: renew the access token.
-            await this.register()
             throw ErrNotRegistered
         }
         console.log(`Calling Rally IO authorize API: state = ${state}, callback = ${callback_url}`);
@@ -103,8 +84,7 @@ class RallyClient {
 
     async requestRallyAccountId(code) {
         console.log(callback_path);
-        if (!access_token) {
-          await this.register()
+        if (!this.access_token) {
           throw ErrNotRegistered;
         }
         const rally_response = await httpPost(
@@ -123,9 +103,7 @@ class RallyClient {
 
     async userinfo(userId) {
           if (!this.access_token) {
-            await this.register()
-            // TODO: renew the access token.
-            throw new Error("Application Not Registered With Rally")
+            throw ErrNotRegistered
           }
           console.log(`userId = ${userId}`);
           console.log("Calling Rally IO userinfo API");
@@ -145,10 +123,7 @@ class RallyClient {
 
     async balance(rallyNetworkWalletId, symbolSearch) {
       if (!this.access_token) {
-        await this.register()
-
-        // TODO: renew the access token.
-        throw new Error("Application Not Registered With Rally")
+        throw ErrNotRegistered
       }
       console.log(`rallyNetworkWalletId = ${userallyNetworkWalletIdrId}`);
       console.log("Calling Rally IO Balance API");
@@ -170,10 +145,7 @@ class RallyClient {
 
     async nft(rallyNetworkWalletId, nftTemplateId) {
       if (!this.access_token) {
-        await this.register()
-
-        // TODO: renew the access token.
-        throw new Error("Application Not Registered With Rally")
+        throw ErrNotRegistered
       }
       console.log(`rallyNetworkWalletId = ${userallyNetworkWalletIdrId}`);
       console.log("Calling Rally IO Balance API");
