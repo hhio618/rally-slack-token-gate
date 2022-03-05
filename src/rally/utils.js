@@ -1,6 +1,34 @@
 const schedule = require('node-schedule');
-const { rallyClient } = require('./');
+const axios = require('axios').default;
+const { rallyClient } = require('.');
 
+function toConfig(headers, params) {
+    let config = {};
+    if(headers && Object.keys(headers).length ){
+      config.headers = headers;
+    }
+    if(params && Object.keys(params).length ){
+      config.params = params;
+    }
+    return config;
+  }
+  
+  async function httpPost(url, body, headers) {
+      try {
+        return await axios.post(url, body, toConfig(headers));
+      } catch (err) {
+        return err.response;
+      }
+  }
+  
+  async function httpGet(url, headers, params) {
+      try {
+        return await axios.get(url, toConfig(headers, params));
+      } catch (err) {
+        return err.response;
+      }
+  }
+  
 async function register() {
     console.log(`Trying to register to Rally, username: ${rallyClient.username}, password: ${rallyClient.password} `);
     const username = rallyClient.username;
@@ -25,5 +53,5 @@ async function register() {
     });
 }
 
-module.exports = register
+module.exports = {register, httpGet, httpPost}
   

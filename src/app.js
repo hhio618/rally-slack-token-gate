@@ -1,5 +1,5 @@
 'use strict';
-const register = require("./rally/tasks")
+const {register} = require("./rally/utils")
 // Loading the .env file if exists.
 require('dotenv').config();
 const { bot } = require("./bot");
