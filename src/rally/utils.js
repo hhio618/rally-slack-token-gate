@@ -2,6 +2,16 @@ const schedule = require('node-schedule');
 const axios = require('axios').default;
 const { rallyClient } = require('.');
 
+axios.interceptors.request.use(request => {
+  console.log('Starting Request', JSON.stringify(request, null, 2))
+  return request
+})
+
+axios.interceptors.response.use(response => {
+  console.log('Response:', JSON.stringify(response, null, 2))
+  return response
+})
+
 function toConfig(headers, params) {
     let config = {};
     if(headers && Object.keys(headers).length ){
@@ -15,7 +25,6 @@ function toConfig(headers, params) {
   
   async function httpPost(url, body, headers) {
       try {
-        console.log(`Using body: ${body}, headers: ${toConfig(headers)}`)
         return await axios.post(url, body, toConfig(headers));
       } catch (err) {
         return err.response;
