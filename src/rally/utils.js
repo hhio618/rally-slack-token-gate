@@ -21,6 +21,7 @@ axios.interceptors.response.use(response => {
   return response
 })
 
+const defaultConfig = {headers: {"Content-Type" :"application/json"}}
 function toConfig(headers, params) {
     let config = {};
     if(headers && Object.keys(headers).length ){
@@ -29,7 +30,7 @@ function toConfig(headers, params) {
     if(params && Object.keys(params).length ){
       config.params = params;
     }
-    return config;
+    return Object.keys(config).length? Object.assign(config, defaultConfig): undefined;
   }
   
   async function httpPost(url, body, headers) {
