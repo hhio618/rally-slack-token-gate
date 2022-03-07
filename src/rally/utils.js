@@ -6,7 +6,7 @@ const { rallyClient } = require('.');
 
 
 axios.interceptors.request.use(config => {
-  config.headers.common["Content-Type"] = "application/json"
+  config.headers["Content-Type"] = "application/json"
   return config
 })
 
