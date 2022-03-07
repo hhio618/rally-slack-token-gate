@@ -1,21 +1,22 @@
+const { config } = require('dotenv');
 const schedule = require('node-schedule');
 const axios = require('axios').default;
 const { rallyClient } = require('.');
 
-// axios instance for making requests
-const axiosInstance = axios.create({
-  // your other properties for axios instance
-  headers: {
-    'Content-Type': "application/json",
-  },
-});
 
-axiosInstance.interceptors.request.use(request => {
+
+axios.interceptors.request.use(config => {
+  config.headers.common["Content-Type"] = "application/json"
+  return config
+})
+
+axios.interceptors.request.use(request => {
   console.log('Starting Request', JSON.stringify(request, null, 2))
   return request
 })
 
-axiosInstance.interceptors.response.use(response => {
+
+axios.interceptors.response.use(response => {
   console.log('Response:', JSON.stringify(response, null, 2))
   return response
 })
@@ -33,7 +34,7 @@ function toConfig(headers, params) {
   
   async function httpPost(url, body, headers) {
       try {
-        return await axiosInstance.post(url, body, toConfig(headers));
+        return await axios.post(url, body, toConfig(headers));
       } catch (err) {
         return err.response;
       }
@@ -41,7 +42,7 @@ function toConfig(headers, params) {
   
   async function httpGet(url, headers, params) {
       try {
-        return await axiosInstance.get(url, toConfig(headers, params));
+        return await axios.get(url, toConfig(headers, params));
       } catch (err) {
         return err.response;
       }
