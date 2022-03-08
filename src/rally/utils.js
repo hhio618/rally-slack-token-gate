@@ -28,7 +28,6 @@ function toConfig(headers, params) {
         return await axios.post(url, body, toConfig(headers));
       } catch (err) {
         console.log(`error while doing http post: err: ${err} response: ${JSON.stringify(err.response)}`);
-
         return err.response;
       }
   }

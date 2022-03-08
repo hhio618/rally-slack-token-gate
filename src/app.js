@@ -11,7 +11,7 @@ const port = process.env.PORT || 5000
 
 // Registring the rally App.
 register().then(()=>console.log(`Rally app registered!`)).
-  catch(e=>console.log(`Rally app registration error: ${e}`))
+  catch(e=>console.log(`Initial rally app registration error: ${e}`))
 
 
 bot.start(port, 
