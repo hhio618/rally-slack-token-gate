@@ -28,7 +28,7 @@ function toConfig(headers, params) {
   async function httpPost(url, body, headers) {
       try {
         const head = toConfig(headers)
-        console.log(`headers: ${json.stringify(head)}`)
+        console.log(`headers: ${JSON.stringify(head)}`)
         return await axios.post(url, body, toConfig(headers));
       } catch (err) {
         console.log(`error while doing http post: ${err}`);
