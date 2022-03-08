@@ -3,13 +3,6 @@ const schedule = require('node-schedule');
 const axios = require('axios').default;
 const { rallyClient } = require('.');
 
-
-
-axios.interceptors.request.use(config => {
-  config.headers["Content-Type"] = "application/json"
-  return config
-})
-
 axios.interceptors.request.use(request => {
   console.log('Starting Request', JSON.stringify(request, null, 2))
   return request
@@ -30,7 +23,9 @@ function toConfig(headers, params) {
     if(params && Object.keys(params).length ){
       config.params = params;
     }
-    return Object.keys(config).length? Object.assign(config, defaultConfig): undefined;
+    console.log(`############ Start`)
+    console.log(`############ ${JSON.stringify(Object.assign(config, defaultConfig))}`)
+    return Object.assign(config, defaultConfig);
   }
   
   async function httpPost(url, body, headers) {
