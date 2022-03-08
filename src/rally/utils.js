@@ -1,6 +1,4 @@
-const schedule = require('node-schedule');
 const axios = require('axios').default;
-const { rallyClient } = require('.');
 
 axios.interceptors.request.use(request => {
   console.log('Starting Request', JSON.stringify(request, null, 2))
@@ -33,6 +31,7 @@ function toConfig(headers, params) {
         console.log(`headers: ${json.stringify(head)}`)
         return await axios.post(url, body, toConfig(headers));
       } catch (err) {
+        console.log(`error while doing http post: ${err}`);
         return err.response;
       }
   }
@@ -41,6 +40,7 @@ function toConfig(headers, params) {
       try {
         return await axios.get(url, toConfig(headers, params));
       } catch (err) {
+        console.log(`error while doing http get: ${err}`);
         return err.response;
       }
   }
