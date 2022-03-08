@@ -20,18 +20,14 @@ function toConfig(headers, params) {
     if(params && Object.keys(params).length ){
       config.params = params;
     }
-    console.log(`############ Start`)
-    console.log(`############ ${JSON.stringify(Object.assign(config, defaultConfig))}`)
     return Object.assign(config, defaultConfig);
   }
   
   async function httpPost(url, body, headers) {
       try {
-        const head = toConfig(headers)
-        console.log(`headers: ${JSON.stringify(head)}`)
         return await axios.post(url, body, toConfig(headers));
       } catch (err) {
-        console.log(`error while doing http post: ${err}`);
+        console.log(`error while doing http post: ${err.response}`);
         return err.response;
       }
   }
@@ -40,7 +36,7 @@ function toConfig(headers, params) {
       try {
         return await axios.get(url, toConfig(headers, params));
       } catch (err) {
-        console.log(`error while doing http get: ${err}`);
+        console.log(`error while doing http get: ${err.response}`);
         return err.response;
       }
   }
