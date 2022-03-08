@@ -1,4 +1,3 @@
-const { config } = require('dotenv');
 const {httpGet, httpPost} = require("./utils")
 
 

@@ -1,9 +1,8 @@
 'use strict';
-const {register} = require("./rally/utils")
+const {register} = require("./rally/tasks")
 // Loading the .env file if exists.
 require('dotenv').config();
 const { bot } = require("./bot");
-const { createClient } = require('redis');
 const { db } = require("./models");
 
 // Running the app after the database initialization.
