@@ -27,7 +27,8 @@ function toConfig(headers, params) {
       try {
         return await axios.post(url, body, toConfig(headers));
       } catch (err) {
-        console.log(`error while doing http post: ${err.response}`);
+        console.log(`error while doing http post: err: ${err} response: ${JSON.stringify(err.response)}`);
+
         return err.response;
       }
   }
@@ -36,7 +37,7 @@ function toConfig(headers, params) {
       try {
         return await axios.get(url, toConfig(headers, params));
       } catch (err) {
-        console.log(`error while doing http get: ${err.response}`);
+        console.log(`error while doing http get: err: ${err} response: ${JSON.stringify(err.response)}`);
         return err.response;
       }
   }
