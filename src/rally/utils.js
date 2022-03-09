@@ -1,12 +1,33 @@
 const axios = require('axios').default;
+var isAbsoluteURL = require('axios/lib/helpers/isAbsoluteURL')
+var buildURL = require('axios/lib/helpers/buildURL')
+var combineURLs = require('axios/lib/helpers/combineURLs')
+var URL_KEY = '__AXIOS-DEBUG-LOG_URL__'
+
+function getURL (config) {
+  var url = config.url
+  if (config.baseURL && !isAbsoluteURL(url)) {
+    url = combineURLs(config.baseURL, url)
+  }
+  return buildURL(url, config.params, config.paramsSerializer)
+}
+
 require('axios-debug-log')({
   request: function (debug, config) {
-    debug('Request with ' + config.headers)
+    var url = getURL(config)
+    Object.defineProperty(config, URL_KEY, { value: url })
+    debug(
+      '--------------------------------------------------------------\n'+
+      config.method.toUpperCase() + ' ' + url + '\ndata: \n' + simpleStringify(config.data)
+      + '\nheaders: \n' + simpleStringify(config.headers) +
+      '\n--------------------------------------------------------------'
+    )
   },
   response: function (debug, response) {
+    var url = response.config[URL_KEY]
     debug(
-      'Response with ' + response.headers,
-      'from ' + response.config.url
+      response.status + ' ' + response.statusText,
+      '(' + response.config.method.toUpperCase() + ' ' + url + ')'
     )
   }
 })
