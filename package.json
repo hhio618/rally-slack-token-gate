@@ -34,6 +34,7 @@
     "@slack/client": "^5.0.2",
     "auto-parse": "1.8.0",
     "axios": "^0.25.0",
+    "axios-debug-log": "0.8.4",
     "child-process-promise": "2.2.1",
     "crypto": "1.0.1",
     "dotenv": "^16.0.0",
