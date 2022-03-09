@@ -89,7 +89,8 @@ async function callback(req, res){
               } catch(error){
                 console.log("err")
                 console.error(error);
-                say(`Unexpected internal error`)
+                res.writeHead(503)
+                res.end("Unexpected internal error!")
                 return;
               }
             }catch(e){

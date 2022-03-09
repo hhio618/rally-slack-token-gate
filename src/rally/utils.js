@@ -28,7 +28,8 @@ require('axios-debug-log')({
     debug(
       '\n<==============================================================\n' +
       response.status + ' ' + response.statusText,
-      '(' + response.config.method.toUpperCase() + ' ' + url + ')' +
+      '(' + response.config.method.toUpperCase() + ' ' + url + ') \nresponse: \n' + 
+      simpleStringify(response.data) +
       '\n<==============================================================\n' 
     )
   }

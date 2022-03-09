@@ -286,7 +286,7 @@ async function requestPrivateChannel ({ command, client, ack, say }) {
 
       try{
         const data = await rallyClient.requestAuthorization(state)
-        say(`Please follow this link to fullfill the challenge using your Rally account: \n${data.url}`)
+        say(`Please follow this link to fulfill the challenge using your Rally account: \n${data.url}`)
       }catch(err) {
         console.log(`while requesting rally authorize url: ${err}`);
         say("Error while requesting a Rally authorization, please try again later")
