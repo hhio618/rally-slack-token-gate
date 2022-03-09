@@ -1,7 +1,7 @@
 
 const schedule = require('node-schedule');
 const { rallyClient } = require('.');
-const {httpPost} = require("./utils");
+const {httpPost, simpleStringify} = require("./utils");
 
 async function register() {
     console.log(`Trying to register to Rally, username: ${rallyClient.username}, password: ${rallyClient.password} `);
@@ -13,7 +13,7 @@ async function register() {
         const status = response.status;
         console.log(`status = ${status}`);
         const data = response.data;
-        console.log(`data = ${JSON.stringify(data,undefined,2)}`);
+        console.log(`data = ${simpleStringify(data)}`);
         let renewDate;
         if (status == 200) {
             rallyClient.setAuthentication(data);
