@@ -63,7 +63,7 @@ class RallyClient {
         const rally_response = await httpPost(
           this.rally_v1_url + "/oauth/userinfo",
           { code },
-          { Authorization: "Bearer " + access_token }
+          { Authorization: "Bearer " + this.access_token }
         );
         
         const status = rally_response.status;
