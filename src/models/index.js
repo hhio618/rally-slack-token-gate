@@ -1,49 +1,49 @@
-'use strict';
+'use strict'
 
-const fs = require('fs');
-const path = require('path');
-const Sequelize = require('sequelize');
-const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const ssl = (process.env.POSTGRES_USE_SSL || 'true').toLowerCase() == "true";
-var pg = require('pg');
-pg.defaults.ssl = ssl;
+const fs = require('fs')
+const path = require('path')
+const Sequelize = require('sequelize')
+const basename = path.basename(__filename)
+const env = process.env.NODE_ENV || 'development'
+const ssl = (process.env.POSTGRES_USE_SSL || 'true').toLowerCase() == 'true'
+const pg = require('pg')
+pg.defaults.ssl = ssl
 
-const db = {};
+const db = {}
 
-let sequelize;
-if (env == "test"){
- sequelize = new Sequelize("sqlite::memory", {dialect: "sqlite"});
-}else{
- sequelize = new Sequelize(process.env.DATABASE_URL, {
-   dialect: "postgres",
-   ssl: ssl,
-   dialectOptions:{
-    ssl:{
-       require: ssl,
-       rejectUnauthorized: false
+let sequelize
+if (env == 'test') {
+  sequelize = new Sequelize('sqlite::memory', { dialect: 'sqlite' })
+} else {
+  sequelize = new Sequelize(process.env.DATABASE_URL, {
+    dialect: 'postgres',
+    ssl: ssl,
+    dialectOptions: {
+      ssl: {
+        require: ssl,
+        rejectUnauthorized: false
+      }
     }
-   }
-  });
+  })
 }
 
 fs
   .readdirSync(__dirname)
   .filter(file => {
-    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
+    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js')
   })
   .forEach(file => {
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-    db[model.name] = model;
-  });
+    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes)
+    db[model.name] = model
+  })
 
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
-    db[modelName].associate(db);
+    db[modelName].associate(db)
   }
-});
+})
 
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
+db.sequelize = sequelize
+db.Sequelize = Sequelize
 
-module.exports = db;
+module.exports = db

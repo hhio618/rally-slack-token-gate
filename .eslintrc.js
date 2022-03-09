@@ -1,6 +1,14 @@
 module.exports = {
-  "env": {
-    "node": true,
-    "mocha": true
+  env: {
+    mocha: true,
+    node: true
+  },
+  extends: [
+    'standard'
+  ],
+  parserOptions: {
+    ecmaVersion: 'latest'
+  },
+  rules: {
   }
-};
+}

@@ -2,4 +2,6 @@
 dist/
 build/
 coverage/
+migrations/
+scripts/
 .nyc_output/

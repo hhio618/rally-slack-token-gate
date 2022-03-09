@@ -2,11 +2,6 @@
 A bot that allows creators to set a threshold of coins needed or NFT needed to gain access to a particular Slack channel.  
 
 ## TODO's
-- [ ] Add eslint
-- [ ] Typo fixes
-- [ ] Add more tests
-- [ ] Renew rally access token
-- [ ] Mock real database for more realistic tests
 - [ ] (Optional) Add support for multiple workspaces using team_id (1- add authorized admin command, 2- add team_id to the database)
 
 ## Slack app setup
