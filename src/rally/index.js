@@ -1,4 +1,5 @@
 const { RallyClient } = require("./rally");
+const url = require("url");
 const {parseRules} = require("../bot/utils")
 const slackUserClient = require("../bot/client")
 const db  = require("../models")
@@ -15,7 +16,6 @@ const callback_url = process.env.RALLY_APP_CALLBACK;
 
 // API client for interacting with the Rally API.
 const rallyClient = new RallyClient(username, password, data_api_base_url,rally_v1_url, rally_api_url, callback_url)
-
 async function callback(req, res){
         const query = url.parse(req.url, true).query;
         console.log(`params = ${JSON.stringify(query)}`);
