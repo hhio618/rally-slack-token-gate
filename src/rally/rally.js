@@ -98,7 +98,7 @@ class RallyClient {
       if (!this.access_token) {
         throw ErrNotRegistered
       }
-      console.log(`rallyNetworkWalletId = ${userallyNetworkWalletIdrId}`);
+      console.log(`rallyNetworkWalletId = ${rallyNetworkWalletId}`);
       console.log("Calling Rally IO Balance API");
       const rally_response = await httpGet(
         `${this.rally_api_url}/rally-network-wallets/${rallyNetworkWalletId}/balance`,
@@ -120,7 +120,7 @@ class RallyClient {
       if (!this.access_token) {
         throw ErrNotRegistered
       }
-      console.log(`rallyNetworkWalletId = ${userallyNetworkWalletIdrId}`);
+      console.log(`rallyNetworkWalletId = ${rallyNetworkWalletId}`);
       console.log("Calling Rally IO Balance API");
       const rally_response = await httpGet(
         `${this.rally_api_url}/nfts`,
