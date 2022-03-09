@@ -57,7 +57,6 @@ class RallyClient {
     }
 
     async requestRallyAccountId(code) {
-        console.log(callback_path);
         if (!this.access_token) {
           throw ErrNotRegistered;
         }
