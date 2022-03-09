@@ -55,56 +55,59 @@ async function callback(req, res){
           res.end("Unexpected internal error!")
           return;
         }
+
         try{
             const rallyNetworkWalletId = await rallyClient.requestRallyAccountId(code)
-            // Request for balances, etc.
-            try{
-              for (const id in rules.coin_rules) {
-                required = rules.coin_rules[id]
-                const actual = await rallyClient.balance(rallyNetworkWalletId, id)
-                if (actual < required){
-                  res.writeHead(200)
-                  res.end(`Minimum CreatorCoin amount for ${id}, required amount: ${required}, user amount: ${actual} `)
-                  return;
-                }
-              }
-              for (const id in rules.nft_rules)  {
-                required = rules.nft_rules[id]
-                const actual = await rallyClient.nft(rallyNetworkWalletId, id)
-                if (actual < required){
-                  res.writeHead(200)
-                  res.end(`Minimum CreatorCoin NFT for ${id}, #required: ${required}, #user amount: ${actual} `)
-                  return;
-                }
-              }
-
-              try {
-                await db.RallyChallenge.update({ settled: true, rally_account_id: rallyNetworkWalletId }, {
-                  where: { rally_state: state },
-                });
-                // Joining the user here.
-                await slackUserClient.conversations.invite({channel: channel.channel_name, user: user.slack_id})
-                res.writeHead(200)
-                res.end("You've been added to the requested channel!")
-              } catch(error){
-                console.log("err")
-                console.error(error);
-                res.writeHead(503)
-                res.end("Unexpected internal error!")
-                return;
-              }
-            }catch(e){
-              console.log("err");
-              console.log(`Unexpected error while parsing challenge rules: ${challenge.required_rules}`)
-              res.writeHead(503)
-              res.end("Unexpected internal error!")
+        }catch(err) {
+          console.log(`while requestung Rally account info: ${err}`);
+          res.writeHead(503)
+          res.end("Internal server error")
+          return;
+        }
+        // Request for balances, etc.
+        try{
+          for (const id in rules.coin_rules) {
+            required = rules.coin_rules[id]
+            const actual = await rallyClient.balance(rallyNetworkWalletId, id)
+            if (actual < required){
+              res.writeHead(200)
+              res.end(`Minimum CreatorCoin amount for ${id}, required amount: ${required}, user amount: ${actual} `)
               return;
             }
-          }catch(err) {
-            console.log(`while requestung Rally account info: ${err}`);
-            res.writeHead(503)
-            res.end("Internal server error")
           }
+          for (const id in rules.nft_rules)  {
+            required = rules.nft_rules[id]
+            const actual = await rallyClient.nft(rallyNetworkWalletId, id)
+            if (actual < required){
+              res.writeHead(200)
+              res.end(`Minimum CreatorCoin NFT for ${id}, #required: ${required}, #user amount: ${actual} `)
+              return;
+            }
+          }
+        }catch(e){
+          console.log("err");
+          console.log(`Unexpected error while requesting account requirements: ${e}`)
+          res.writeHead(503)
+          res.end("Unexpected internal error!")
+          return;
+        }
+
+        try {
+          await db.RallyChallenge.update({ settled: true, rally_account_id: rallyNetworkWalletId }, {
+            where: { rally_state: state },
+          });
+          // Joining the user here.
+          await slackUserClient.conversations.invite({channel: channel.channel_name, user: user.slack_id})
+          res.writeHead(200)
+          res.end("You've been added to the requested channel!")
+        }catch(error){
+          console.log("err")
+          console.error(`Unexpected error while finalizing user invitation: ${error}`);
+          res.writeHead(503)
+          res.end("Unexpected internal error!")
+          return;
+        }
+
       
 }
 
