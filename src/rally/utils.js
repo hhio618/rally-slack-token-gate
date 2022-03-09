@@ -1,5 +1,16 @@
 const axios = require('axios').default;
-require('axios-debug-log/enable')
+require('axios-debug-log')({
+  request: function (debug, config) {
+    debug('Request with ' + config.headers)
+  },
+  response: function (debug, response) {
+    debug(
+      'Response with ' + response.headers,
+      'from ' + response.config.url
+    )
+  }
+})
+require('axios-debug-log/enable');
 
 
 const defaultConfig = {headers: {"Content-Type" :"application/json"}}
