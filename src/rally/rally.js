@@ -42,7 +42,7 @@ class RallyClient {
         }
         console.log(`Calling Rally IO authorize API: state = ${state}, callback = ${this.callback_url}`);
         const rally_response = await httpPost(
-          rally_v1_url + "/oauth/authorize",
+          this.rally_v1_url + "/oauth/authorize",
           { callback: this.callback_url, state: state },
           { Authorization: "Bearer " + this.access_token }
         );
@@ -62,7 +62,7 @@ class RallyClient {
           throw ErrNotRegistered;
         }
         const rally_response = await httpPost(
-          rally_v1_url + "/oauth/userinfo",
+          this.rally_v1_url + "/oauth/userinfo",
           { code },
           { Authorization: "Bearer " + access_token }
         );
