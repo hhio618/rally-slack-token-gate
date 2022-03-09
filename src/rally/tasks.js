@@ -1,11 +1,12 @@
 
+const { default: axios } = require('axios');
 const { rallyClient } = require('.');
 const {httpPost, simpleStringify} = require("./utils");
 
 async function register() {
     const username = rallyClient.username;
     const password = rallyClient.password;
-    const response = await httpPost(rallyClient.rally_v1_url + "/oauth/register", {username, password});
+    const response = await axios.post(rallyClient.rally_v1_url + "/oauth/register", {username, password}, {headers: {"Content-Type" :"application/json"}});
     console.log(`###### Response = ${simpleStringify(response)}`);
     const status = response.status;
     console.log(`status = ${status}`);
@@ -15,7 +16,7 @@ async function register() {
         rallyClient.setAuthentication(data);
     } else {
         rallyClient.setAuthentication();
-        console.log("error while registering Rally App")
+        throw new Error("error while registering Rally App")
     }
     return data
 }

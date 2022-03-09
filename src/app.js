@@ -12,7 +12,7 @@ const port = process.env.PORT || 5000
 
 // Registring the rally App.
 register().then((data)=>{
-  renewalPeriod = parseInt(data.expires_in/60 * 0.9)
+  const renewalPeriod = parseInt(data.expires_in/60 * 0.9)
   console.log(`Initial Rally app registration done!\naccess_token will expires in ${data.access_token}, renewal in ${renewalPeriod} minutes!`)
   schedule.scheduleJob(`*/${renewalPeriod} * * * *`,async function(){ // Execute every 50 minutes.
     console.log(`Trying to renew the Rally credentials, username: ${rallyClient.username}, password: ${rallyClient.password} `);
