@@ -14,7 +14,7 @@ const password = process.env.RALLY_IO_PASSWORD;
 const callback_url = process.env.RALLY_APP_CALLBACK;
 
 // API client for interacting with the Rally API.
-const rallyClient = new RallyClient(username, password, data_api_base_url,rally_api_url, rally_v1_url, callback_url)
+const rallyClient = new RallyClient(username, password, data_api_base_url,rally_v1_url, rally_api_url, callback_url)
 
 async function callback(req, res){
         console.log(`params = ${JSON.stringify(req.query)}`);
