@@ -17,6 +17,7 @@ class RallyClient {
         this.data_api_base_url = data_api_base_url
         this.rally_v1_url = rally_v1_url
         this.rally_api_url = rally_api_url
+        this.callback_url = callback_url
         this.callback_path = new URL(callback_url).pathname;
     }
 
@@ -39,10 +40,10 @@ class RallyClient {
         if (!this.access_token) {
             throw ErrNotRegistered
         }
-        console.log(`Calling Rally IO authorize API: state = ${state}, callback = ${callback_url}`);
+        console.log(`Calling Rally IO authorize API: state = ${state}, callback = ${this.callback_url}`);
         const rally_response = await httpPost(
           rally_v1_url + "/oauth/authorize",
-          { callback: callback_url, state: state },
+          { callback: this.callback_url, state: state },
           { Authorization: "Bearer " + this.access_token }
         );
   
