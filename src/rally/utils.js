@@ -41,7 +41,7 @@ function toConfig(headers, params) {
       }
   }
   
-  function simpleStringify (object){
+function simpleStringify (object){
     var simpleObject = {};
     for (var prop in object ){
         if (!object.hasOwnProperty(prop)){
