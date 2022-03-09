@@ -80,8 +80,11 @@ describe('Bot commands', () => {
     it('Basic functionality', async () => {
       say = sinon.stub()
       ack = sinon.stub()
-      challengeFindOrCreate = sinon.stub(db.RallyChallenge, "findOrCreate").callsFake(({where}) => {
+      challengeDestroy = sinon.stub(db.RallyChallenge, "destroy").callsFake(({where}) => {
         assert (where.user_id === "test_user" && where.channel_id === "test_channel")
+      });
+      challengeCreate = sinon.stub(db.RallyChallenge, "create").callsFake((data) => {
+        assert (data.user_id === "test_user" && data.channel_id === "test_channel")
       });
       requestAuthorizationStub = sinon.stub(rallyClient, "requestAuthorization").returns(
         {

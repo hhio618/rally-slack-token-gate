@@ -272,16 +272,16 @@ async function requestPrivateChannel ({ command, client, ack, say }) {
 
       // Random state string.
       const state = crypto.randomBytes(10).toString('hex');
-      // Create the Rally challenge if not exists.
-      await db.RallyChallenge.findOrCreate({
-        where: { user_id: user.id, channel_id: channel.id },
-        defaults: {
-          user_id: user.id, 
-          channel_id: channel.id,
-          settled: false,
-          rally_state: state,
-          required_rules: `${channel.coin_rules}|${channel.nft_rules}`
-        }
+
+      // TODO: handle group left event. 
+      // Destroy the Rally challenge.
+      await db.RallyChallenge.destroy({where: {user_id: user.id, channel_id: channel.id}})
+      await db.RallyChallenge.create({
+        user_id: user.id, 
+        channel_id: channel.id,
+        settled: false,
+        rally_state: state,
+        required_rules: `${channel.coin_rules}|${channel.nft_rules}`
       });
 
       try{
