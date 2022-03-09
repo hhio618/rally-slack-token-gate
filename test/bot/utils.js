@@ -5,10 +5,10 @@ const { httpPost } = require("../../src/rally/utils");
 
 describe('Bot utils', () => {
     describe('axios', () => {
-        it.only("test setConfig", async ()=>{
+        it("test setConfig", async ()=>{
             const postStub = sinon.stub(axios, "post")
-            await httpPost("dummy", {user: "dummy", pass: "pass"})
-            // sinon.assert.calledWith(postStub, "dummy", {user: "dummy", pass: "pass"}, {headers: {"Content-Type" :"application/json"}})
+            await httpPost("dummy", {user: "dummy", pass: "pass"}, {Authorization :"dummy"})
+            sinon.assert.calledWith(postStub, "dummy", {user: "dummy", pass: "pass"}, {headers: {"Content-Type": "application/json" , Authorization :"dummy"}})
         })
     })
 })

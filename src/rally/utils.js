@@ -17,17 +17,19 @@ require('axios-debug-log')({
     var url = getURL(config)
     Object.defineProperty(config, URL_KEY, { value: url })
     debug(
-      '--------------------------------------------------------------\n'+
+      '\n==============================================================>\n'+
       config.method.toUpperCase() + ' ' + url + '\ndata: \n' + simpleStringify(config.data)
       + '\nheaders: \n' + simpleStringify(config.headers) +
-      '\n--------------------------------------------------------------'
+      '\n==============================================================>\n'
     )
   },
   response: function (debug, response) {
     var url = response.config[URL_KEY]
     debug(
+      '\n<==============================================================\n' +
       response.status + ' ' + response.statusText,
-      '(' + response.config.method.toUpperCase() + ' ' + url + ')'
+      '(' + response.config.method.toUpperCase() + ' ' + url + ')' +
+      '\n<==============================================================\n' 
     )
   }
 })
@@ -36,14 +38,14 @@ require('axios-debug-log/enable');
 
 const defaultConfig = {headers: {"Content-Type" :"application/json"}}
 function toConfig(headers, params) {
-    let config = {};
+    let config = defaultConfig;
     if(headers && Object.keys(headers).length ){
-      config.headers = headers;
+      config.headers = Object.assign(config.headers, headers);
     }
     if(params && Object.keys(params).length ){
       config.params = params;
     }
-    return Object.assign(config, defaultConfig);
+    return config
   }
   
   async function httpPost(url, body, headers) {

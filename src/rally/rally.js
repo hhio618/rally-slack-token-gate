@@ -44,7 +44,7 @@ class RallyClient {
         const rally_response = await httpPost(
           this.rally_v1_url + "/oauth/authorize",
           { callback: this.callback_url, state: state },
-          { headers: {Authorization: "Bearer " + this.access_token } }
+          { Authorization: "Bearer " + this.access_token }
         );
   
         console.log(`rally_response = ${JSON.stringify(rally_response.data)}`);
@@ -64,7 +64,7 @@ class RallyClient {
         const rally_response = await httpPost(
           this.rally_v1_url + "/oauth/userinfo",
           { code },
-          { headers: {Authorization: "Bearer " + this.access_token } }
+          { Authorization: "Bearer " + access_token }
         );
         
         const status = rally_response.status;
@@ -83,7 +83,7 @@ class RallyClient {
           console.log("Calling Rally IO userinfo API");
           const rally_response = await httpGet(
             `${this.rally_v1_url}/users/rally/${userId}/userinfo`,
-            { headers: {Authorization: "Bearer " + this.access_token } }
+            { Authorization: "Bearer " + this.access_token }
           );
     
           console.log(`rally_response = ${JSON.stringify(rally_response.data)}`);
@@ -103,8 +103,7 @@ class RallyClient {
       console.log("Calling Rally IO Balance API");
       const rally_response = await httpGet(
         `${this.rally_api_url}/rally-network-wallets/${rallyNetworkWalletId}/balance`,
-        { headers: {Authorization: "Bearer " + this.access_token } }
-        , {symbolSearch}
+        { Authorization: "Bearer " + this.access_token }, {symbolSearch}
       );
 
       console.log(`rally_response = ${JSON.stringify(rally_response.data)}`);
@@ -126,8 +125,7 @@ class RallyClient {
       console.log("Calling Rally IO Balance API");
       const rally_response = await httpGet(
         `${this.rally_api_url}/nfts`,
-        { headers: {Authorization: "Bearer " + this.access_token } }
-        , {rallyNetworkWalletId, nftTemplateId}
+        { Authorization: "Bearer " + this.access_token }, {rallyNetworkWalletId, nftTemplateId}
       );
 
       console.log(`rally_response = ${JSON.stringify(rally_response.data)}`);
