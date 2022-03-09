@@ -1,4 +1,5 @@
 'use strict';
+const schedule = require('node-schedule');
 const {register} = require("./rally/tasks")
 // Loading the .env file if exists.
 require('dotenv').config();
@@ -10,8 +11,11 @@ const port = process.env.PORT || 5000
 
 
 // Registring the rally App.
-register().then(()=>console.log(`Rally app registered!`)).
-  catch(e=>console.log(`Initial rally app registration error: ${e}`))
+schedule.scheduleJob("*/50 * * * *",async function(){ // Execute every 50 minutes.
+  console.log(`Trying to renew the Rally credentials, username: ${rallyClient.username}, password: ${rallyClient.password} `);
+  register().then(()=>console.log(`Rally token renewed!`)).
+  catch(e=>console.log(`Rally token renewal error: ${e}`))
+});
 
 
 bot.start(port, 
