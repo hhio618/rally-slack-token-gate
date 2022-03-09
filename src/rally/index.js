@@ -29,7 +29,7 @@ async function callback(req, res){
         }
 
         const challenge = await db.RallyChallenge.findOne({
-          where: { state: state },
+          where: { rally_state: state },
         });
 
         const channel = await db.Channel.findOne({
@@ -80,7 +80,7 @@ async function callback(req, res){
 
               try {
                 await db.RallyChallenge.update({ settled: true, rally_account_id: rallyNetworkWalletId }, {
-                  where: { state: state },
+                  where: { rally_state: state },
                 });
                 // Joining the user here.
                 await slackUserClient.conversations.invite({channel: channel.channel_name, user: user.slack_id})

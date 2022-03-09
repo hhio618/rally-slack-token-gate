@@ -14,7 +14,7 @@ describe('Rally callback', () => {
     let updateStub, challengeStub, channelStub, userStub, res;
     let requestRallyAccountIdStub, balanceStub, nftStub;
     let inviteStub;
-    let query = {code: "code", state: "state"}
+    let req = {url: "https://example.com/?code=code&state=state"}
     beforeEach(()=>{
       res = mockResponse({writeHead: sinon.spy()})
       requestRallyAccountIdStub = sinon.stub(rallyClient, "requestRallyAccountId").returns("test_rally_wallet_id")
@@ -23,7 +23,7 @@ describe('Rally callback', () => {
       inviteStub = sinon.stub(slackUserClient.conversations, "invite")
       
       challengeStub = sinon.stub(db.RallyChallenge, "findOne").callsFake(({where}) => {
-        assert (where.state == "state");
+        assert (where.rally_state == "state");
         return {user_id: 1, channel_id: 1, state: "state", required_rules: "dummy_coin:2.5|dummy_nft:1"}
       });
       channelStub = sinon.stub(db.Channel, "findOne").callsFake(({where}) => {
@@ -35,7 +35,7 @@ describe('Rally callback', () => {
         return {slack_id: "test_user"}
       });
       updateStub = sinon.stub(db.RallyChallenge, "update").callsFake(({settled, rally_account_id},{where}) => {
-        assert (where.state == "state");
+        assert (where.rally_state == "state");
         assert (settled == true);
         assert (rally_account_id == "test_rally_wallet_id");
         return;
@@ -56,13 +56,13 @@ describe('Rally callback', () => {
     it('Basic functionality', async () => {
       balanceStub.returns(2.5)
       nftStub.returns(1)
-      await callback({query}, res)
+      await callback(req, res)
       
       sinon.assert.calledOnce(challengeStub)
       sinon.assert.calledOnce(channelStub)
       sinon.assert.calledOnce(userStub)
       sinon.assert.calledOnce(updateStub)
-      sinon.assert.calledOnceWithExactly(requestRallyAccountIdStub, query.code)
+      sinon.assert.calledOnceWithExactly(requestRallyAccountIdStub, "code")
       sinon.assert.calledOnceWithExactly(balanceStub, "test_rally_wallet_id", "dummy_coin")
       sinon.assert.calledOnceWithExactly(nftStub, "test_rally_wallet_id", "dummy_nft")
       sinon.assert.calledOnceWithExactly(inviteStub, {channel: "test_channel", user: "test_user"})
@@ -70,12 +70,12 @@ describe('Rally callback', () => {
     it('Requirement unmet by user', async () => {
         balanceStub.returns(1)
         nftStub.returns(1)
-        await callback({query}, res)
+        await callback(req, res)
         
         sinon.assert.calledOnce(challengeStub)
         sinon.assert.calledOnce(channelStub)
         sinon.assert.calledOnce(userStub)
-        sinon.assert.calledOnceWithExactly(requestRallyAccountIdStub, query.code)
+        sinon.assert.calledOnceWithExactly(requestRallyAccountIdStub, "code")
         sinon.assert.calledOnceWithExactly(balanceStub, "test_rally_wallet_id", "dummy_coin")
         sinon.assert.notCalled(nftStub)
         sinon.assert.notCalled(inviteStub)
