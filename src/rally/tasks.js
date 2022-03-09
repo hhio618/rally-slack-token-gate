@@ -10,6 +10,7 @@ async function register() {
     let renewDate = Date.now() +  60 * 1000; // Default: Retrying in a minute!
     try {
         const response = await httpPost(rallyClient.rally_v1_url + "/oauth/register", {username, password});
+        console.log(`###### Response = ${simpleStringify(response)}`);
         const status = response.status;
         console.log(`status = ${status}`);
         const data = response.data;
@@ -22,7 +23,7 @@ async function register() {
             rallyClient.setAuthentication();
             console.log("error while registering Rally App")
         }
-    }catch(err){
+    } catch(err) {
         console.log(`error while Registering rally App: ${err}`)
     }
     schedule.scheduleJob(renewDate, function(){
