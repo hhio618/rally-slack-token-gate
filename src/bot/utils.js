@@ -3,6 +3,9 @@ const { identity } = require("lodash")
 
 function toDict(txt, is_float=false){
     let out = {};
+    if (!txt || txt.trim().length === 0 ){
+        return out;
+    }
     const rules = txt.split(",");
     for (const rule of rules){
         const [id, value] = rule.split(":");
