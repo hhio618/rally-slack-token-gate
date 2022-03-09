@@ -56,8 +56,9 @@ async function callback(req, res){
           return;
         }
 
+        let rallyNetworkWalletId;
         try{
-            const rallyNetworkWalletId = await rallyClient.requestRallyAccountId(code)
+            rallyNetworkWalletId = await rallyClient.requestRallyAccountId(code)
         }catch(err) {
           console.log(`while requestung Rally account info: ${err}`);
           res.writeHead(503)
