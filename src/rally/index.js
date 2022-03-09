@@ -17,9 +17,10 @@ const callback_url = process.env.RALLY_APP_CALLBACK;
 const rallyClient = new RallyClient(username, password, data_api_base_url,rally_v1_url, rally_api_url, callback_url)
 
 async function callback(req, res){
-        console.log(`params = ${JSON.stringify(req.query)}`);
-        const code = req.query.code;
-        const state = req.query.state;
+        const query = url.parse(req.url, true).query;
+        console.log(`params = ${JSON.stringify(query)}`);
+        const code = query.code;
+        const state = query.state;
         console.log(`code = ${code}, state = ${state}`);
         if (code === "cancelled") {
           res.writeHead(503)
