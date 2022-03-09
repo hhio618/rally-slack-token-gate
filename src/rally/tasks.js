@@ -6,7 +6,7 @@ async function register() {
     const username = rallyClient.username;
     const password = rallyClient.password;
     const response = await httpPost(rallyClient.rally_v1_url + "/oauth/register", {username, password});
-    console.log(`###### Response = ${response}`);
+    console.log(`###### Response = ${simpleStringify(response)}`);
     const status = response.status;
     console.log(`status = ${status}`);
     const data = response.data;
