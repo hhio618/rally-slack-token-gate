@@ -46,7 +46,7 @@ async function adminOnly ({ payload, client, context, next }) {
 // Route the slash commands.
 bot.command('/add-channel', adminOnly, addChannel)
 bot.command('/remove-channel', adminOnly, removeChannel)
-bot.command('/list-channels', adminOnly, listChannels)
+bot.command('/list-channels', listChannels)
 bot.command('/set-nft-rules', adminOnly, setNFTRules)
 bot.command('/clear-nft-rules', adminOnly, clearNFTRules)
 bot.command('/set-coin-rules', adminOnly, setCoinRules)
