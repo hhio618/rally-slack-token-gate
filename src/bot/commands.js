@@ -327,22 +327,23 @@ async function setCoinRules ({ command, ack, say }) {
 async function requestPrivateChannel ({ command, client, ack, say }) {
   try {
     await ack()
+    const txt = command.text // The inputted parameters
     let channel_id
     try {
       console.log("###################")
-      console.log(command.txt)
+      console.log(txt)
       console.log("###################")
-      const result = await client.conversations.info({ channel: command.txt })
+      const result = await client.conversations.info({ channel: txt })
       channel_id = result.channel.id
     } catch (error) {
       // Check the code property, and when its a PlatformError, log the whole response.
       if (error.code === ErrorCode.PlatformError) {
         console.log(error.data)
       } else {
-        say(command.txt + 'channel is not found or bot is not a memeber of it')
+        say(txt + 'channel is not found or bot is not a memeber of it')
       }
       console.log(error)
-      console.log(command.txt)
+      console.log(txt)
       return
     }
     
