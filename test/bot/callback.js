@@ -62,7 +62,7 @@ describe('Rally callback', () => {
       sinon.assert.calledOnceWithExactly(requestRallyAccountIdStub, 'code')
       sinon.assert.calledOnceWithExactly(balanceStub, 'test_rally_wallet_id', 'dummy_coin')
       sinon.assert.calledOnceWithExactly(nftStub, 'test_rally_wallet_id', 'dummy_nft')
-      sinon.assert.calledOnceWithExactly(inviteStub, { channel: 'test_channel', user: 'test_user' })
+      sinon.assert.calledOnceWithExactly(inviteStub, { channel: 'test_channel', users: 'test_user' })
     })
     it('Requirement unmet by user', async () => {
       balanceStub.returns(1)

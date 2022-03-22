@@ -45,8 +45,11 @@ oauth_config:
       - groups:read
       - groups:write
       - im:history
-      - mpim:read
       - im:read
+      - mpim:read
+      - im:write
+      - mpim:write
+      - channels:manage
 settings:
   event_subscriptions:
     bot_events:
@@ -55,7 +58,7 @@ settings:
       - message.channels
       - message.im
   interactivity:
-    is_enabled: false
+    is_enabled: true
   org_deploy_enabled: false
   socket_mode_enabled: true
   token_rotation_enabled: false

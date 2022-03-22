@@ -96,7 +96,7 @@ async function callback (req, res) {
       where: { rally_state: state }
     })
     // Joining the user here.
-    await slackBotClient.conversations.invite({ channel: channel.channel_name, user: user.slack_id })
+    await slackBotClient.conversations.invite({ channel: channel.channel_name, users: user.slack_id })
     res.writeHead(200)
     res.end("You've been added to the requested channel!")
   } catch (error) {
