@@ -134,7 +134,7 @@ async function removeChannel ({ command, ack, say }) {
   }
 }
 
-async function listChannels ({ command, ack, say }) {
+async function listChannels ({ command, client, ack, say }) {
   try {
     await ack()
     const results = await db.Channel.findAll()
@@ -143,7 +143,18 @@ async function listChannels ({ command, ack, say }) {
       say(`Empty channels list, try adding private channels using the /add-channel command.`)
     }
     for (record of records) {
-      say(`Channel name: ${record.channel_name}\nNFT rules: ${record.nft_rules}\nCreatorCoin rules: ${record.coin_rules}`)
+      let result = {channel: {name: "", id: record.channel_name}}
+      try {
+        result = await client.conversations.info({ channel: record.channel_name })
+      } catch (error) {
+        // Check the code property, and when its a PlatformError, log the whole response.
+        if (error.code === ErrorCode.PlatformError) {
+          console.log(error.data)
+        } 
+        console.log(error)
+        console.log(txt)
+      }
+      say(`Channel name: ${result.channel.name}(#${result.channel.id})\nNFT rules: ${record.nft_rules}\nCreatorCoin rules: ${record.coin_rules}`)
     }
   } catch (error) {
     console.log('err')
