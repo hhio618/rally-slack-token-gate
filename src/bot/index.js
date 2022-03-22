@@ -1,7 +1,7 @@
 const { App } = require('@slack/bolt')
 const {
   addChannel, removeChannel, listChannels, setNFTRules,
-  setCoinRules, requestPrivateChannel
+  setCoinRules, requestPrivateChannel, clearNFTRules, clearCoinRules
 } = require('./commands')
 const { callback } = require('../rally')
 const slackUserClient = require('./client')
@@ -48,7 +48,9 @@ bot.command('/add-channel', adminOnly, addChannel)
 bot.command('/remove-channel', adminOnly, removeChannel)
 bot.command('/list-channels', adminOnly, listChannels)
 bot.command('/set-nft-rules', adminOnly, setNFTRules)
+bot.command('/clear-nft-rules', adminOnly, clearNFTRules)
 bot.command('/set-coin-rules', adminOnly, setCoinRules)
+bot.command('/clear-coin-rules', adminOnly, clearCoinRules)
 bot.command('/request-channel', requestPrivateChannel)
 
 // Listening to the required events.

@@ -20,6 +20,12 @@ features:
     - command: /set-coin-rules
       description: Set Rally CreatorCoin related rules for a managed private channel
       should_escape: false
+    - command: /clear-nft-rules
+      description: Clear Rally NFT related rules for a managed private channel
+      should_escape: false
+    - command: /clear-coin-rules
+      description: Clear Rally CreatorCoin related rules for a managed private channel
+      should_escape: false
     - command: /list-channels
       description: List the managed channels
       should_escape: false

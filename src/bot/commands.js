@@ -162,6 +162,86 @@ async function listChannels ({ command, client, ack, say }) {
   }
 }
 
+async function clearNFTRules ({ command, ack, say }) {
+  let rules
+  try {
+    await ack()
+    let channel_id
+    try {
+      channel_id = getChannelId(command.text)
+    } catch (error) {
+      console.log(error)
+      say(command.txt + ' is not a valid private channel')
+      return
+    }
+
+    const channel = await db.Channel.findOne({
+      where: { channel_name: channel_id }
+    })
+
+    if (channel === null) {
+      say('Channel not found!')
+      return
+    }
+    try {
+      await db.Channel.update({ nft_rules: "" }, {
+        where: {
+          channel_name: channel_id
+        }
+      })
+    } catch (error) {
+      console.log('err')
+      console.error(error)
+      say('Unexpected internal error')
+      return
+    }
+    say('Rules cleared!')
+  } catch (error) {
+    console.log('err')
+    console.error(error)
+  }
+}
+
+async function clearCoinRules ({ command, ack, say }) {
+  let rules
+  try {
+    await ack()
+    let channel_id
+    try {
+      channel_id = getChannelId(command.text)
+    } catch (error) {
+      console.log(error)
+      say(command.txt + ' is not a valid private channel')
+      return
+    }
+
+    const channel = await db.Channel.findOne({
+      where: { channel_name: channel_id }
+    })
+
+    if (channel === null) {
+      say('Channel not found!')
+      return
+    }
+    try {
+      await db.Channel.update({ coin_rules: "" }, {
+        where: {
+          channel_name: channel_id
+        }
+      })
+    } catch (error) {
+      console.log('err')
+      console.error(error)
+      say('Unexpected internal error')
+      return
+    }
+    say('Rules cleared!')
+  } catch (error) {
+    console.log('err')
+    console.error(error)
+  }
+}
+
 async function setNFTRules ({ command, ack, say }) {
   let rules
   try {
@@ -306,4 +386,4 @@ async function requestPrivateChannel ({ command, client, ack, say }) {
   }
 }
 
-module.exports = { validateRules, addChannel, removeChannel, listChannels, setNFTRules, setCoinRules, requestPrivateChannel }
+module.exports = { validateRules, addChannel, removeChannel, listChannels, setNFTRules, setCoinRules, clearCoinRules, clearNFTRules, requestPrivateChannel }
