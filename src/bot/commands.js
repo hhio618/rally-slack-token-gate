@@ -139,6 +139,9 @@ async function listChannels ({ command, ack, say }) {
     await ack()
     const results = await db.Channel.findAll()
     const records = results.map(result => result.dataValues)
+    if (records.length === 0){
+      say(`Empty channels list, try adding private channels using the /add-channel command.`)
+    }
     for (record of records) {
       say(`Channel name: ${record.channel_name}\nNFT rules: ${record.nft_rules}\nCreatorCoin rules: ${record.coin_rules}`)
     }

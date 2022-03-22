@@ -1,0 +1,55 @@
+display_information:
+  name: Rally token bot
+features:
+  bot_user:
+    display_name: Rally token bot
+    always_online: true
+  slash_commands:
+    - command: /request-channel
+      description: Request private channel
+      should_escape: false
+    - command: /add-channel
+      description: Add a private channel to the bot
+      should_escape: false
+    - command: /remove-channel
+      description: Remove an existing channel
+      should_escape: false
+    - command: /set-nft-rules
+      description: Set Rally NFT related rules for a managed private channel
+      should_escape: false
+    - command: /set-coin-rules
+      description: Set Rally CreatorCoin related rules for a managed private channel
+      should_escape: false
+    - command: /list-channels
+      description: List the managed channels
+      should_escape: false
+oauth_config:
+  scopes:
+    user:
+      - admin
+      - groups:read
+    bot:
+      - app_mentions:read
+      - channels:history
+      - channels:join
+      - channels:read
+      - chat:write
+      - commands
+      - conversations.connect:write
+      - groups:read
+      - groups:write
+      - im:history
+      - mpim:read
+      - im:read
+settings:
+  event_subscriptions:
+    bot_events:
+      - app_mention
+      - channel_deleted
+      - message.channels
+      - message.im
+  interactivity:
+    is_enabled: false
+  org_deploy_enabled: false
+  socket_mode_enabled: true
+  token_rotation_enabled: false
