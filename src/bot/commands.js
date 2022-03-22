@@ -329,14 +329,23 @@ async function requestPrivateChannel ({ command, client, ack, say }) {
     await ack()
     let channel_id
     try {
-      channel_id = getChannelId(command.text)
+      console.log("###################")
+      console.log(command.txt)
+      console.log("###################")
+      const result = await client.conversations.info({ channel: command.txt })
+      channel_id = result.channel.id
     } catch (error) {
+      // Check the code property, and when its a PlatformError, log the whole response.
+      if (error.code === ErrorCode.PlatformError) {
+        console.log(error.data)
+      } else {
+        say(command.txt + 'channel is not found or bot is not a memeber of it')
+      }
       console.log(error)
-      console.log(txt)
-      say(txt + ' is not a valid private channel')
+      console.log(command.txt)
       return
     }
-
+    
     const channel = await db.Channel.findOne({
       where: { channel_name: channel_id }
     })
