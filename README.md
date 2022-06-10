@@ -1,6 +1,11 @@
 # Rally slack token gate bot
 A bot that allows creators to set a threshold of coins needed or NFT needed to gain access to a particular Slack channel.  
 
+## Video walkthrough
+### For channel admins
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/NQC9hnsnBu0/0.jpg)](https://www.youtube.com/watch?v=NQC9hnsnBu0)
+### For users
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/ltZPJqRdXPA/0.jpg)](https://www.youtube.com/watch?v=ltZPJqRdXPA)
 ## TODO's
 - [ ] (Optional) Add support for multiple workspaces using team_id (1- add authorized admin command, 2- add team_id to the database)
 
